@@ -1,8 +1,9 @@
+import "../global.css";
+
 import { Button, Text, View } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import { useEffect } from "react";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 const webClientId =
   "498533876869-rq782bqg50ptnqq26pvfju3b2n3l8oqu.apps.googleusercontent.com";
@@ -50,6 +51,7 @@ export default function Index() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#f0fcf0",
       }}
     >
       <Text>Sign in with google.</Text>
