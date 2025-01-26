@@ -1,64 +1,83 @@
 import "../global.css";
+import { Dimensions, Pressable, View } from "react-native";
 
-import { Button, Text, View } from "react-native";
-import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
-import { useEffect } from "react";
-
-const webClientId =
-  "498533876869-rq782bqg50ptnqq26pvfju3b2n3l8oqu.apps.googleusercontent.com";
-const iosClientId =
-  "498533876869-aoitc00ig4pi9d77hpnh7d6cn3vmduv3.apps.googleusercontent.com";
-const androidClientId =
-  "498533876869-k1vrifad45b0rlgd7mrlght7ecu9dmqm.apps.googleusercontent.com";
-
-WebBrowser.maybeCompleteAuthSession();
+import InputBox from "@/src/components/ui/InputBox";
+import ViewBackground from "@/src/components/ui/ViewBackground";
+import TextBig from "@/src/components/ui/TextBig";
+import Button from "@/src/components/ui/Button";
+import TextSmall from "@/src/components/ui/TextSmall";
+import styles from "./index.styles";
+import TextNormal from "@/src/components/ui/TextNormal";
 
 export default function Index() {
-  const googleConfig = {
-    webClientId,
-    iosClientId,
-    androidClientId,
-  };
+  // User Name Input changes
+  function onUserNameValueChange(text: string) {
+    console.log(text);
+  }
 
-  const [request, response, promptAsync] = Google.useAuthRequest(googleConfig);
+  // Login button pressed
+  function onHandleLoginPressed() {}
 
-  const handleToken = () => {
-    // Implement Google sign-in here
-    if (response?.type === "success") {
-      const { authentication } = response;
-      const token = authentication?.accessToken;
-      console.log("Access Token:", token);
-      getUserInfo(token);
-    }
-  };
+  // sign up link pressed
+  function onHandleSignUpPressed() {}
 
-  const getUserInfo = async (token: string) => {
-    const userInfoResponse = await fetch(
-      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`
-    );
-    const userInfo = await userInfoResponse.json();
-    console.log("User Info:", userInfo);
-  };
-
-  useEffect(() => {
-    handleToken();
-  }, [response]);
+  // Calculate margin top for the login screen based on the screen height
+  const { height } = Dimensions.get("screen");
+  const tenPercentageHeight = height * 0.1;
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#f0fcf0",
-      }}
-    >
-      <Text>Sign in with google.</Text>
-      <Button
-        title="Sign in with Google"
-        onPress={() => promptAsync()}
-      ></Button>
-    </View>
+    <ViewBackground style={{ paddingHorizontal: 32 }}>
+      <View style={[styles.container, { marginTop: tenPercentageHeight }]}>
+        <View
+          style={{
+            marginVertical: 20,
+            alignItems: "center",
+          }}
+        >
+          <TextBig title="Hello!" />
+        </View>
+        <InputBox
+          value=""
+          placeholder="User Name"
+          style={styles.marginTop16}
+          onChangeText={onUserNameValueChange}
+        />
+        <InputBox
+          value=""
+          placeholder="Password"
+          style={styles.marginTop16}
+          onChangeText={onUserNameValueChange}
+        />
+
+        <Button
+          title="Login"
+          onPress={onHandleLoginPressed}
+          viewStyle={styles.marginTop32}
+        ></Button>
+
+        <TextSmall title="or connect using" style={styles.marginTop32} />
+        <View style={styles.connectButtonContainer}>
+          <Button title="Google" onPress={onHandleLoginPressed}></Button>
+          <Button
+            title="Facebook"
+            onPress={onHandleLoginPressed}
+            viewStyle={{ marginLeft: 50 }}
+          ></Button>
+        </View>
+        <View style={[styles.marginTop32, { flexDirection: "row" }]}>
+          <TextSmall title="Don't have an account" />
+          <Pressable onPress={onHandleSignUpPressed}>
+            <TextNormal
+              title="Sign Up"
+              style={{
+                marginLeft: 10,
+                color: "blue",
+                textDecorationLine: "underline",
+              }}
+            />
+          </Pressable>
+        </View>
+      </View>
+    </ViewBackground>
   );
 }
