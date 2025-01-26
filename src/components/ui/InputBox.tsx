@@ -9,7 +9,7 @@ import {
 
 interface InputBoxProps extends TextInputProps {
   value: string;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: string) => void;
   placeholder?: string;
   style: StyleProp<TextStyle>;
 }

@@ -1,12 +1,5 @@
 import { StyleSheet } from "react-native";
-
-const marginTop16 = {
-  marginTop: 16,
-};
-
-const marginTop32 = {
-  marginTop: 32,
-};
+import commonStyles from "@/src/styles/commonStyles";
 
 const styles = StyleSheet.create({
   container: {
@@ -14,12 +7,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
   },
-  marginTop16: marginTop16,
-  marginTop32: marginTop32,
+
   connectButtonContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    ...marginTop32,
+    ...commonStyles.marginTop32,
   },
 });
 

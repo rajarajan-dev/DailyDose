@@ -1,6 +1,3 @@
-import "../global.css";
-import { Dimensions, Pressable, View } from "react-native";
-
 import InputBox from "@/src/components/ui/InputBox";
 import ViewBackground from "@/src/components/ui/ViewBackground";
 import TextBig from "@/src/components/ui/TextBig";
@@ -8,6 +5,10 @@ import Button from "@/src/components/ui/Button";
 import TextSmall from "@/src/components/ui/TextSmall";
 import styles from "./index.styles";
 import TextNormal from "@/src/components/ui/TextNormal";
+import { Link } from "expo-router";
+import useMarginTop from "@/src/hooks/useMarginTop";
+import { View } from "react-native";
+import commonStyles from "@/src/styles/commonStyles";
 
 export default function Index() {
   // User Name Input changes
@@ -18,12 +19,7 @@ export default function Index() {
   // Login button pressed
   function onHandleLoginPressed() {}
 
-  // sign up link pressed
-  function onHandleSignUpPressed() {}
-
-  // Calculate margin top for the login screen based on the screen height
-  const { height } = Dimensions.get("screen");
-  const tenPercentageHeight = height * 0.1;
+  const tenPercentageHeight = useMarginTop();
 
   return (
     <ViewBackground style={{ paddingHorizontal: 32 }}>
@@ -39,23 +35,23 @@ export default function Index() {
         <InputBox
           value=""
           placeholder="User Name"
-          style={styles.marginTop16}
+          style={commonStyles.marginTop16}
           onChangeText={onUserNameValueChange}
         />
         <InputBox
           value=""
           placeholder="Password"
-          style={styles.marginTop16}
+          style={commonStyles.marginTop16}
           onChangeText={onUserNameValueChange}
         />
 
         <Button
           title="Login"
           onPress={onHandleLoginPressed}
-          viewStyle={styles.marginTop32}
+          viewStyle={commonStyles.marginTop32}
         ></Button>
 
-        <TextSmall title="or connect using" style={styles.marginTop32} />
+        <TextSmall title="or connect using" style={commonStyles.marginTop32} />
         <View style={styles.connectButtonContainer}>
           <Button title="Google" onPress={onHandleLoginPressed}></Button>
           <Button
@@ -64,18 +60,18 @@ export default function Index() {
             viewStyle={{ marginLeft: 50 }}
           ></Button>
         </View>
-        <View style={[styles.marginTop32, { flexDirection: "row" }]}>
-          <TextSmall title="Don't have an account" />
-          <Pressable onPress={onHandleSignUpPressed}>
+        <View style={[commonStyles.marginTop32, { flexDirection: "row" }]}>
+          <TextSmall title="Don't have an account?" />
+
+          <Link href="/signup" style={{ marginLeft: 5 }}>
             <TextNormal
               title="Sign Up"
               style={{
-                marginLeft: 10,
                 color: "blue",
                 textDecorationLine: "underline",
               }}
             />
-          </Pressable>
+          </Link>
         </View>
       </View>
     </ViewBackground>
