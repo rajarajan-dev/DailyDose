@@ -5,19 +5,23 @@ import Button from "@/src/components/ui/Button";
 import TextSmall from "@/src/components/ui/TextSmall";
 import styles from "./index.styles";
 import TextNormal from "@/src/components/ui/TextNormal";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import useMarginTop from "@/src/hooks/useMarginTop";
 import { View } from "react-native";
 import commonStyles from "@/src/styles/commonStyles";
 
 export default function Index() {
+  const router = useRouter();
+
   // User Name Input changes
   function onUserNameValueChange(text: string) {
     console.log(text);
   }
 
   // Login button pressed
-  function onHandleLoginPressed() {}
+  function onHandleLoginPressed() {
+    router.push("/tabs");
+  }
 
   const tenPercentageHeight = useMarginTop();
 
