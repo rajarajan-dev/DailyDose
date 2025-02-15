@@ -1,4 +1,5 @@
 import React from "react";
+import "../../../global.css";
 import {
   TextInput,
   StyleSheet,
@@ -23,7 +24,7 @@ const InputBox: React.FC<InputBoxProps> = ({
 }) => {
   return (
     <TextInput
-      style={[styles.input, style]}
+      className="p-2 bg-white"
       value={value}
       onChangeText={onChangeText}
       placeholder={placeholder}

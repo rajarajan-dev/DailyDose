@@ -32,6 +32,7 @@ export default function Index() {
           style={{
             marginVertical: 20,
             alignItems: "center",
+            
           }}
         >
           <TextBig title="Hello!" />
