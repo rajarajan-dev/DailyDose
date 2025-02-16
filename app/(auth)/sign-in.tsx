@@ -11,6 +11,8 @@ import FormField from "@/src/components/FormField";
 import CustomButton from "@/src/components/CustomButton";
 import "../../global.css";
 import { router } from "expo-router";
+import Passcode from "@/src/components/Passcode";
+import PasscodeField from "@/src/components/PasscodeField";
 
 export default function signin() {
   const [userName, setUserName] = useState("");
@@ -21,7 +23,7 @@ export default function signin() {
   }
 
   function handleSignIn() {
-    Alert.alert("RxNT", "Sign in, please login in!");
+    Alert.alert("Alert", "Sign in, please login in!");
   }
 
   function handleSignUp() {
@@ -51,15 +53,10 @@ export default function signin() {
           placeholder="UserName"
         />
 
-        <FormField
+        <PasscodeField
           title="Passcode"
-          value={passcode}
-          handleChangeText={(value) => {
-            setUserName(value);
-          }}
-          otherStyles="mt-4"
-          keyboardType="default"
-          placeholder="Passcode"
+          otherStyles="w-16"
+          textStyles="text-center"
         />
 
         <TouchableOpacity onPress={handleForgotPassword}>

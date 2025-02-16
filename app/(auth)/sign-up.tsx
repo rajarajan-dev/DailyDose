@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import FormField from "@/src/components/FormField";
 import CustomButton from "@/src/components/CustomButton";
 import { router } from "expo-router";
+import PasscodeField from "@/src/components/PasscodeField";
 
 export default function signup() {
   const [forms, setForms] = useState({
@@ -39,32 +40,16 @@ export default function signup() {
           placeholder="UserName"
         />
 
-        <FormField
+        <PasscodeField
           title="Passcode"
-          value={forms.passcode}
-          handleChangeText={(value) => {
-            setForms((prev) => ({
-              ...prev,
-              passcode: value,
-            }));
-          }}
-          otherStyles="mt-4"
-          keyboardType="numeric"
-          placeholder="Passcode"
+          otherStyles="w-16"
+          textStyles="text-center"
         />
 
-        <FormField
+        <PasscodeField
           title="Confirm Passcode"
-          value={forms.confirmPasscode}
-          handleChangeText={(value) => {
-            setForms((prev) => ({
-              ...prev,
-              confirmPasscode: value,
-            }));
-          }}
-          otherStyles="mt-4"
-          keyboardType="numeric"
-          placeholder="Confirm Passcode"
+          otherStyles="w-16"
+          textStyles="text-center"
         />
 
         <FormField
@@ -76,7 +61,7 @@ export default function signup() {
               email: value,
             }));
           }}
-          otherStyles="mt-4"
+          otherStyles="mt-0"
           keyboardType="email-address"
           placeholder="Email"
         />

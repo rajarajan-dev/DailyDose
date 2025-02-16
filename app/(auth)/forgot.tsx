@@ -23,7 +23,7 @@ const forgot = () => {
       >
         <View className="items-center">
           <Text className="text-base font-semibold text-white font-psemibold mt-3">
-            Forgot Password?
+            Forgot Passcode?
           </Text>
         </View>
 
@@ -45,7 +45,7 @@ const forgot = () => {
         />
 
         <CustomButton
-          title="Reset password"
+          title="Reset passcode"
           handlePress={() => {
             router.back();
           }}
