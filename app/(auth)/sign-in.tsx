@@ -1,23 +1,32 @@
-import { View, Text, SafeAreaView, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Dimensions,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
 import FormField from "@/src/components/FormField";
 import CustomButton from "@/src/components/CustomButton";
 import "../../global.css";
+import { router } from "expo-router";
 
 export default function signin() {
   const [userName, setUserName] = useState("");
   const [passcode, setPasscode] = useState("");
 
-  // User Name Input changes
-  function onUserNameValueChange(text: String) {
-    console.log(text);
+  function handleForgotPassword() {
+    router.push("/forgot");
   }
 
-  // Login button pressed
-  function onHandleLoginPressed() {}
+  function handleSignIn() {
+    Alert.alert("RxNT", "Sign in, please login in!");
+  }
 
-  // sign up link pressed
-  function onHandleSignUpPressed() {}
+  function handleSignUp() {
+    router.push("/(auth)/sign-up");
+  }
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -28,7 +37,7 @@ export default function signin() {
         }}
       >
         <Text className="text-2xl font-semibold text-white font-psemibold">
-          Sign in!
+          Sign In!
         </Text>
 
         <FormField
@@ -53,16 +62,24 @@ export default function signin() {
           placeholder="Passcode"
         />
 
-        <Text className="text-xs font-semibold text-white mt-3 text-right mr-2">
-          Forgot Passcode
-        </Text>
+        <TouchableOpacity onPress={handleForgotPassword}>
+          <Text className="text-sm font-semibold mt-3 text-right mr-2 underline text-secondary-100">
+            Forgot Passcode
+          </Text>
+        </TouchableOpacity>
 
         <CustomButton
           title="Sign In"
-          handlePress={() => {}}
+          handlePress={handleSignIn}
           containerStyles="mt-7"
           isLoading={false}
         />
+
+        <TouchableOpacity onPress={handleSignUp}>
+          <Text className="text-sm font-semibold mt-3 text-right mr-2 underline text-secondary-100">
+            Don't have an account?. Register!
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
