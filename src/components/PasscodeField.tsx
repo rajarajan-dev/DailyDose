@@ -24,7 +24,7 @@ const PasscodeField: React.FC<PasscodeFieldProps> = ({
       <Text className="text-base text-gray-100 font-pmedium mt-3 mb-3">
         {title}
       </Text>
-      <View className="flex-row justify-evenly pb-5 ">
+      <View className="flex-row justify-evenly pb-5">
         <Passcode
           value={passcode.p1}
           handleChangeText={(value) => {

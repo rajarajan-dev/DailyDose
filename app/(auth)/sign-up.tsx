@@ -1,5 +1,5 @@
-import { View, Text, SafeAreaView, Dimensions } from "react-native";
-import React, { useState } from "react";
+import { View, Text, SafeAreaView, Dimensions, ScrollView } from "react-native";
+import { useState } from "react";
 import FormField from "@/src/components/FormField";
 import CustomButton from "@/src/components/CustomButton";
 import { router } from "expo-router";
@@ -16,79 +16,81 @@ export default function signup() {
 
   return (
     <SafeAreaView className="bg-primary h-full">
-      <View
-        className="px-4"
-        style={{
-          marginTop: Dimensions.get("screen").height * 0.05,
-        }}
-      >
-        <Text className="text-2xl font-semibold text-white font-psemibold">
-          Sign up!
-        </Text>
-
-        <FormField
-          title="UserName"
-          value={forms.username}
-          handleChangeText={(value) => {
-            setForms((prev) => ({
-              ...prev,
-              username: value,
-            }));
+      <ScrollView>
+        <View
+          className="px-4"
+          style={{
+            marginTop: Dimensions.get("screen").height * 0.05,
           }}
-          otherStyles="mt-8"
-          keyboardType="default"
-          placeholder="UserName"
-        />
+        >
+          <Text className="text-2xl font-semibold text-white font-psemibold">
+            Sign up!
+          </Text>
 
-        <PasscodeField
-          title="Passcode"
-          otherStyles="w-16"
-          textStyles="text-center"
-        />
+          <FormField
+            title="UserName"
+            value={forms.username}
+            handleChangeText={(value) => {
+              setForms((prev) => ({
+                ...prev,
+                username: value,
+              }));
+            }}
+            otherStyles="mt-8"
+            keyboardType="default"
+            placeholder="UserName"
+          />
 
-        <PasscodeField
-          title="Confirm Passcode"
-          otherStyles="w-16"
-          textStyles="text-center"
-        />
+          <PasscodeField
+            title="Passcode"
+            otherStyles="w-16"
+            textStyles="text-center"
+          />
 
-        <FormField
-          title="Email"
-          value={forms.email}
-          handleChangeText={(value) => {
-            setForms((prev) => ({
-              ...prev,
-              email: value,
-            }));
-          }}
-          otherStyles="mt-0"
-          keyboardType="email-address"
-          placeholder="Email"
-        />
+          <PasscodeField
+            title="Confirm Passcode"
+            otherStyles="w-16"
+            textStyles="text-center"
+          />
 
-        <FormField
-          title="Phone"
-          value={forms.phone}
-          handleChangeText={(value) => {
-            setForms((prev) => ({
-              ...prev,
-              phone: value,
-            }));
-          }}
-          otherStyles="mt-4"
-          keyboardType="numeric"
-          placeholder="Phone"
-        />
+          <FormField
+            title="Email"
+            value={forms.email}
+            handleChangeText={(value) => {
+              setForms((prev) => ({
+                ...prev,
+                email: value,
+              }));
+            }}
+            otherStyles="mt-0"
+            keyboardType="email-address"
+            placeholder="Email"
+          />
 
-        <CustomButton
-          title="Sign Up"
-          handlePress={() => {
-            router.back();
-          }}
-          containerStyles="mt-7"
-          isLoading={false}
-        />
-      </View>
+          <FormField
+            title="Phone"
+            value={forms.phone}
+            handleChangeText={(value) => {
+              setForms((prev) => ({
+                ...prev,
+                phone: value,
+              }));
+            }}
+            otherStyles="mt-4"
+            keyboardType="numeric"
+            placeholder="Phone"
+          />
+
+          <CustomButton
+            title="Sign Up"
+            handlePress={() => {
+              router.back();
+            }}
+            containerStyles="mt-7"
+            isLoading={false}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

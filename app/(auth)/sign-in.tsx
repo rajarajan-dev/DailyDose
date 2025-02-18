@@ -3,15 +3,13 @@ import {
   Text,
   SafeAreaView,
   Dimensions,
-  Alert,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import FormField from "@/src/components/FormField";
 import CustomButton from "@/src/components/CustomButton";
 import "../../global.css";
 import { router } from "expo-router";
-import Passcode from "@/src/components/Passcode";
 import PasscodeField from "@/src/components/PasscodeField";
 
 export default function signin() {
@@ -23,7 +21,7 @@ export default function signin() {
   }
 
   function handleSignIn() {
-    Alert.alert("Alert", "Sign in, please login in!");
+    router.push("/(tabs)/home");
   }
 
   function handleSignUp() {

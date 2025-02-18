@@ -5,7 +5,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import FormField from "@/src/components/FormField";
 import CustomButton from "@/src/components/CustomButton";
 import { router } from "expo-router";

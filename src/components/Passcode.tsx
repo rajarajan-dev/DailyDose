@@ -15,7 +15,7 @@ const Passcode: React.FC<PasscodeProps> = ({
 }) => {
   return (
     <View
-      className={`w-full h-16 px-4 bg-black-100 rounded-2xl border-2 border-black-200 focus:border-secondary flex flex-row items-center ${otherStyles}`}
+      className={`h-16 px-4 bg-black-100 rounded-2xl border-2 border-black-200 focus:border-secondary flex flex-row items-center ${otherStyles}`}
     >
       <TextInput
         className={`flex-1 text-white font-psemibold text-base ${textStyles}`}
