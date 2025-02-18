@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 
-const HomeScreen = () => {
+const TodayScreen = () => {
   return (
     <View>
       <Text>Home Screen</Text>
@@ -8,4 +8,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default TodayScreen;

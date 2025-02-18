@@ -21,7 +21,7 @@ export default function signin() {
   }
 
   function handleSignIn() {
-    router.push("/(tabs)/home");
+    router.push("/(tabs)/today");
   }
 
   function handleSignUp() {
