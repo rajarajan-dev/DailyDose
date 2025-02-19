@@ -1,5 +1,5 @@
-import CustomButton from "@/src/components/CustomButton";
-import FormField from "@/src/components/FormField";
+import CustomButton from "@/src/components/ui/CustomButton";
+import FormField from "@/src/components/ui/FormField";
 import { useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 

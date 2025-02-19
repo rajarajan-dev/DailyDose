@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
-import Passcode from "./Passcode";
+import Passcode from "./ui/Passcode";
 
 interface PasscodeFieldProps {
   title: string;

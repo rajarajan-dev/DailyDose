@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView, Dimensions, ScrollView } from "react-native";
 import { useState } from "react";
-import FormField from "@/src/components/FormField";
-import CustomButton from "@/src/components/CustomButton";
+import FormField from "@/src/components/ui/FormField";
+import CustomButton from "@/src/components/ui/CustomButton";
 import { router } from "expo-router";
 import PasscodeField from "@/src/components/PasscodeField";
 
