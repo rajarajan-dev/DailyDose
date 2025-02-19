@@ -1,10 +1,8 @@
 import CustomButton from "@/src/components/ui/CustomButton";
-import TodayDrugCard from "@/src/components/TodayDrugCard";
 import { prescriptions } from "@/src/mocks/prescriptionsdata";
-import { prescription } from "@/src/types/prescription";
+import PrescriptionList from "@/src/components/PrescriptionList";
 import { router } from "expo-router";
-import { View, Text, FlatList, SafeAreaView } from "react-native";
-import PrescriptionList from "@/src/components/prescriptionList";
+import { View, Text, SafeAreaView } from "react-native";
 
 export default function TodayScreen() {
   const handleAddDrugs = () => {

@@ -1,6 +1,6 @@
-import PrescriptionList from "@/src/components/prescriptionList";
-import { View, Text, SafeAreaView } from "react-native";
+import PrescriptionList from "@/src/components/PrescriptionList";
 import { prescriptions } from "@/src/mocks/prescriptionsdata";
+import { View, Text, SafeAreaView } from "react-native";
 
 const FindScreen = () => {
   return (

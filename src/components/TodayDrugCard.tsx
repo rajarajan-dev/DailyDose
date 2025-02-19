@@ -46,7 +46,6 @@ const TodayDrugCard: React.FC<TodayDrugCardProps> = ({
         Doctor:{" "}
         <Text className="text-gray-500 font-psemibold text-base">{doctor}</Text>
       </Text>
-      // add action buttons for taken and not taken
       <View className="flex-row justify-between mt-4">
         <TouchableOpacity className="bg-red-500 px-4 py-2 rounded">
           <Text className="text-white font-bold">Not Taken</Text>
