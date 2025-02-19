@@ -39,6 +39,14 @@ export default function RootLayout() {
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="add-drugs"
+        options={{
+          headerShown: true,
+          title: "Add Drugs",
+          headerBackTitle: "Back",
+        }}
+      />
     </Stack>
   );
 }
