@@ -1,4 +1,5 @@
 import SupportUs from "@/src/components/ui/SupportUs";
+import { Link, Redirect } from "expo-router";
 import { View, Text, SafeAreaView } from "react-native";
 
 const ProfileScreen = () => {
@@ -10,7 +11,7 @@ const ProfileScreen = () => {
         </Text>
       </View>
 
-      <View className="p-1">
+      <View className="p-2 m-2">
         <Text className="text-2xl text-white">User Name:</Text>
         <Text className="text-white text-xl ml-4">John Doe</Text>
 
@@ -21,9 +22,13 @@ const ProfileScreen = () => {
         <Text className="text-white text-xl ml-4">+1234567890</Text>
       </View>
       <View className="bg-gray-300 h-0.5 w-full my-2"></View>
-      <View className="p-4">
-        <Text className="text-secondary text-xl">Update Passcode</Text>
-      </View>
+
+      <Link href="/update-passcode">
+        <View className="p-4">
+          <Text className="text-secondary text-xl">Update Passcode</Text>
+        </View>
+      </Link>
+
       <View className="p-2">
         <SupportUs />
       </View>

@@ -5,8 +5,8 @@ import { router } from "expo-router";
 import { View, Text, SafeAreaView } from "react-native";
 
 export default function TodayScreen() {
-  const handleAddDrugs = () => {
-    router.push("/add-drugs");
+  const handleAddDrug = () => {
+    router.push("/add-drug");
   };
 
   return (
@@ -27,10 +27,10 @@ export default function TodayScreen() {
 
         <View className="p-2">
           <CustomButton
-            title="Add Drugs"
+            title="Add Drug"
             containerStyles="bg-secondary py-3 rounded-lg min-h-[34px]"
             textStyles="font-pregular text-base"
-            handlePress={handleAddDrugs}
+            handlePress={handleAddDrug}
             isLoading={false}
           />
         </View>
