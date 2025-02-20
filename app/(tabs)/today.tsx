@@ -22,6 +22,7 @@ export default function TodayScreen() {
           data={prescriptions}
           handleTaken={() => {}}
           handleNotTaken={() => {}}
+          cardType="today"
         />
 
         <View className="p-2">

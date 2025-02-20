@@ -16,6 +16,7 @@ const ManageScreen = () => {
           data={prescriptions}
           handleTaken={() => {}}
           handleNotTaken={() => {}}
+          cardType="display"
         />
       </View>
     </SafeAreaView>

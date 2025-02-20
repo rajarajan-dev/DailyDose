@@ -47,6 +47,14 @@ export default function RootLayout() {
           headerBackTitle: "Back",
         }}
       />
+      <Stack.Screen
+        name="update-passcode"
+        options={{
+          headerShown: true,
+          title: "Change Passcode",
+          headerBackTitle: "Back",
+        }}
+      />
     </Stack>
   );
 }

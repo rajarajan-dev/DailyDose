@@ -1,21 +1,23 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-interface TodayDrugCardProps {
+interface DisplayDrugCardProps {
   name: string;
   description: string;
   timing: string;
   taken: string;
-  handleTaken: () => void;
-  handleNotTaken: () => void;
+  startDate: string;
+  endDate: string;
+  doctor: string;
 }
 
-const TodayDrugCard: React.FC<TodayDrugCardProps> = ({
+const DisplayDrugCard: React.FC<DisplayDrugCardProps> = ({
   name,
   description,
   timing,
   taken,
-  handleTaken,
-  handleNotTaken,
+  startDate,
+  endDate,
+  doctor,
 }) => {
   return (
     <View className="bg-white p-4 rounded-lg shadow m-2">
@@ -29,16 +31,19 @@ const TodayDrugCard: React.FC<TodayDrugCardProps> = ({
         Taken:{" "}
         <Text className="text-gray-500 font-psemibold text-base">{taken}</Text>
       </Text>
-      <View className="flex-row justify-between mt-4">
-        <TouchableOpacity className="bg-red-500 px-4 py-2 rounded">
-          <Text className="text-white font-bold">Not Taken</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-green-500 px-4 py-2 rounded">
-          <Text className="text-white font-bold">Taken</Text>
-        </TouchableOpacity>
-      </View>
+      <View className="h-0.5 bg-gray-200 my-2"></View>
+      <Text className="text-gray-600 font-psemibold text-xl">
+        Date:{" "}
+        <Text className="text-gray-500 font-psemibold text-base">
+          {startDate} - {endDate}
+        </Text>
+      </Text>
+      <Text className="text-gray-600 font-psemibold text-xl">
+        Doctor:{" "}
+        <Text className="text-gray-500 font-psemibold text-base">{doctor}</Text>
+      </Text>
     </View>
   );
 };
 
-export default TodayDrugCard;
+export default DisplayDrugCard;

@@ -14,6 +14,7 @@ const FindScreen = () => {
           data={prescriptions}
           handleTaken={() => {}}
           handleNotTaken={() => {}}
+          cardType="display"
         />
       </View>
     </SafeAreaView>

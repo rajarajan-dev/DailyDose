@@ -2,19 +2,33 @@ import { View, Text, FlatList } from "react-native";
 import React from "react";
 import { prescription } from "../types/prescription";
 import TodayDrugCard from "./TodayDrugCard";
+import DisplayDrugCard from "./DisplayDrugCard";
 
-interface prescriptionListProps {
+interface PrescriptionListProps {
   data: prescription[];
   handleTaken: (item: prescription) => void;
   handleNotTaken: (item: prescription) => void;
+  cardType: "today" | "display";
 }
-const prescriptionList: React.FC<prescriptionListProps> = ({
+const PrescriptionList: React.FC<PrescriptionListProps> = ({
   data,
   handleTaken,
   handleNotTaken,
+  cardType,
 }) => {
-  const renderItem = ({ item }: { item: prescription }) => (
+  const renderTodayDrugCardItem = ({ item }: { item: prescription }) => (
     <TodayDrugCard
+      name={item.name}
+      description={item.description}
+      timing={"Morning, Lunch, Evening, Night"}
+      taken={item.taken}
+      handleTaken={() => handleTaken(item)}
+      handleNotTaken={() => handleNotTaken(item)}
+    />
+  );
+
+  const renderDisplayDrugCardItem = ({ item }: { item: prescription }) => (
+    <DisplayDrugCard
       name={item.name}
       description={item.description}
       timing={"Morning, Lunch, Evening, Night"}
@@ -22,18 +36,20 @@ const prescriptionList: React.FC<prescriptionListProps> = ({
       startDate={item.startDate}
       endDate={item.endDate}
       doctor={item.doctor}
-      handleTaken={() => handleTaken(item)}
-      handleNotTaken={() => handleNotTaken(item)}
     />
   );
 
   return (
     <FlatList
       data={data}
-      renderItem={renderItem}
+      renderItem={
+        cardType == "today"
+          ? renderTodayDrugCardItem
+          : renderDisplayDrugCardItem
+      }
       keyExtractor={(item) => item.id}
     />
   );
 };
 
-export default prescriptionList;
+export default PrescriptionList;
