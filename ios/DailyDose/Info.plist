@@ -27,8 +27,8 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>myapp</string>
-          <string>com.rajarajandev.DailyDose</string>
+          <string>DailyDose</string>
+          <string>com.rajarajan.dailydose</string>
         </array>
       </dict>
     </array>
