@@ -11,7 +11,7 @@ const ProfileScreen = () => {
         </Text>
       </View>
 
-      <View className="p-2 m-2">
+      <View className="p-2">
         <Text className="text-2xl text-white">User Name:</Text>
         <Text className="text-white text-xl ml-4">John Doe</Text>
 
@@ -32,7 +32,11 @@ const ProfileScreen = () => {
       <View className="p-2">
         <SupportUs />
       </View>
-      <Text className="text-secondary text-xl p-4">Logout</Text>
+      <Link href="/(auth)/sign-in">
+        <View className="p-4">
+          <Text className="text-secondary text-xl">Logout</Text>
+        </View>
+      </Link>
     </SafeAreaView>
   );
 };
