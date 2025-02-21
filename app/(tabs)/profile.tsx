@@ -17,9 +17,6 @@ const ProfileScreen = () => {
 
         <Text className="text-2xl text-white">Email:</Text>
         <Text className="text-white text-xl ml-4">john.doe@example.com</Text>
-
-        <Text className="text-2xl text-white">Phone:</Text>
-        <Text className="text-white text-xl ml-4">+1234567890</Text>
       </View>
       <View className="bg-gray-300 h-0.5 w-full my-2"></View>
 

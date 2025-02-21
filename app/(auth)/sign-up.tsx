@@ -41,18 +41,6 @@ export default function signup() {
             placeholder="UserName"
           />
 
-          <PasscodeField
-            title="Passcode"
-            otherStyles="w-16"
-            textStyles="text-center"
-          />
-
-          <PasscodeField
-            title="Confirm Passcode"
-            otherStyles="w-16"
-            textStyles="text-center"
-          />
-
           <FormField
             title="Email"
             value={forms.email}
@@ -67,18 +55,16 @@ export default function signup() {
             placeholder="Email"
           />
 
-          <FormField
-            title="Phone"
-            value={forms.phone}
-            handleChangeText={(value) => {
-              setForms((prev) => ({
-                ...prev,
-                phone: value,
-              }));
-            }}
-            otherStyles="mt-4"
-            keyboardType="numeric"
-            placeholder="Phone"
+          <PasscodeField
+            title="Passcode"
+            otherStyles="w-16"
+            textStyles="text-center"
+          />
+
+          <PasscodeField
+            title="Confirm Passcode"
+            otherStyles="w-16"
+            textStyles="text-center"
           />
 
           <CustomButton
