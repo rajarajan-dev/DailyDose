@@ -3,25 +3,70 @@ import {
   Text,
   SafeAreaView,
   Dimensions,
+  Image,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 import { useState } from "react";
 import FormField from "@/src/components/ui/FormField";
 import CustomButton from "@/src/components/ui/CustomButton";
 import "../../global.css";
 import { router } from "expo-router";
-import PasscodeField from "@/src/components/PasscodeField";
+import { icons } from "@/src/constants";
 
 export default function signin() {
-  const [userName, setUserName] = useState("");
-  const [passcode, setPasscode] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
+
+  const validateInputs = (email: string, password: string) => {
+    let errors: { email?: string; password?: string } = {};
+
+    if (!email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = "Invalid email format";
+    }
+
+    if (!password.trim()) {
+      errors.password = "Password is required";
+    }
+
+    return errors;
+  };
 
   function handleForgotPassword() {
     router.push("/forgot");
   }
 
   function handleSignIn() {
-    router.push("/(tabs)/today");
+    const validationErrors = validateInputs(email, password);
+    setErrors(validationErrors);
+    console.log(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      console.log("Login successful with:", { email, password });
+    }
+    /*
+    const promise = AppwriteService.getInstance()
+      .createSession(email, password)
+      .then();
+
+    promise.then(
+      function (response) {
+        response.userId;
+        response.current;
+        console.log(JSON.stringify(response)); // Success
+      },
+      function (error) {
+        console.log("Error : " + error); // Failure
+      }
+    );
+    */
+
+    //router.push("/(tabs)/today");
   }
 
   function handleSignUp() {
@@ -36,30 +81,38 @@ export default function signin() {
           marginTop: Dimensions.get("screen").height * 0.2,
         }}
       >
-        <Text className="text-2xl font-semibold text-white font-psemibold">
+        <Text className="text-2xl font-semibold text-white font-psemibold text-center">
           Sign In!
         </Text>
 
         <FormField
-          title="UserName"
-          value={userName}
+          title="Email Id"
+          value={email}
           handleChangeText={(value) => {
-            setUserName(value);
+            setEmail(value);
           }}
           otherStyles="mt-8"
           keyboardType="default"
-          placeholder="UserName"
+          placeholder="Email Id"
+        />
+        {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+
+        <FormField
+          title="Password"
+          value={password}
+          handleChangeText={(value) => {
+            setPassword(value);
+          }}
+          otherStyles="mt-8"
+          keyboardType="default"
+          placeholder="Password"
         />
 
-        <PasscodeField
-          title="Passcode"
-          otherStyles="w-16"
-          textStyles="text-center"
-        />
+        {errors.password && <Text style={styles.error}>{errors.password}</Text>}
 
         <TouchableOpacity onPress={handleForgotPassword}>
           <Text className="text-sm font-semibold mt-3 text-right mr-2 underline text-secondary-100">
-            Forgot Passcode
+            Forgot Password
           </Text>
         </TouchableOpacity>
 
@@ -67,11 +120,25 @@ export default function signin() {
           title="Sign In"
           handlePress={handleSignIn}
           containerStyles="mt-7"
-          isLoading={false}
+          isLoading={true}
         />
 
+        <TouchableOpacity onPress={() => {}}>
+          <View className="flex mt-4 flex-row justify-end">
+            <Image
+              source={icons.checked}
+              height={10}
+              width={10}
+              resizeMode="contain"
+            />
+            <Text className="text-sm font-semibold text-right ml-2 mr-2 underline text-secondary-100">
+              Remember me
+            </Text>
+          </View>
+        </TouchableOpacity>
+
         <TouchableOpacity onPress={handleSignUp}>
-          <Text className="text-sm font-semibold mt-3 text-right mr-2 underline text-secondary-100">
+          <Text className="text-sm font-semibold mt-7 text-right mr-2 underline text-secondary-100">
             Don't have an account?. Register!
           </Text>
         </TouchableOpacity>
@@ -79,3 +146,10 @@ export default function signin() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  error: {
+    color: "red",
+    marginTop: 5,
+  },
+});

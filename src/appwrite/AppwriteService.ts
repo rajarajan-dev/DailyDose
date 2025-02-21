@@ -1,6 +1,6 @@
 import { Client, Account, ID } from "react-native-appwrite";
 
-class AppwriteService {
+export class AppwriteService {
   private static instance: AppwriteService;
   private account: Account;
   private client: Client;
@@ -19,7 +19,7 @@ class AppwriteService {
   }
   // user sign in
   public async createSession(email: string, password: string) {
-    return this.account.createSession(email, password);
+    return this.account.createEmailPasswordSession(email, password);
   }
 
   // user sign up

@@ -12,6 +12,8 @@ import eyeHide from "../../assets/icons/eye-hide.png";
 import eye from "../../assets/icons/eye.png";
 import play from "../../assets/icons/play.png";
 import gpayScanner from "../../assets/icons/my_gpay_scanner.jpeg";
+import unchecked from "../../assets/icons/unchecked.png";
+import checked from "../../assets/icons/checked.png";
 
 export default {
   play,
@@ -28,4 +30,6 @@ export default {
   eyeHide,
   eye,
   gpayScanner,
+  unchecked,
+  checked,
 };
