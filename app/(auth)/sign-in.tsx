@@ -73,7 +73,7 @@ export default function signin() {
 
     setIsLoading(true);
     const sessionId = await SecureStore.getItemAsync("sessionid");
-    AppwriteService.getInstance().closeSession(sessionId || "");
+    AppwriteService.getInstance().closeSession(sessionId || "current");
     const promise = AppwriteService.getInstance().createSession(
       email,
       password
