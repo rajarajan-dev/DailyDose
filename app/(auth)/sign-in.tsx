@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import FormField from "@/src/components/ui/FormField";
@@ -69,7 +70,7 @@ export default function signin() {
       },
       function (error) {
         setIsLoading(false);
-        console.log("Error : " + error); // Failure
+        Alert.alert("Sign In", error.message);
       }
     );
   }
