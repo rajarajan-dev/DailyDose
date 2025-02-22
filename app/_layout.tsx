@@ -1,6 +1,7 @@
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
+import { StateProvider } from "@/src/providers/StateContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -35,26 +36,28 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="add-drug"
-        options={{
-          headerShown: true,
-          title: "Add Drugs",
-          headerBackTitle: "Back",
-        }}
-      />
-      <Stack.Screen
-        name="update-passcode"
-        options={{
-          headerShown: true,
-          title: "Change Passcode",
-          headerBackTitle: "Back",
-        }}
-      />
-    </Stack>
+    <StateProvider>
+      <Stack>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="add-drug"
+          options={{
+            headerShown: true,
+            title: "Add Drugs",
+            headerBackTitle: "Back",
+          }}
+        />
+        <Stack.Screen
+          name="update-passcode"
+          options={{
+            headerShown: true,
+            title: "Change Passcode",
+            headerBackTitle: "Back",
+          }}
+        />
+      </Stack>
+    </StateProvider>
   );
 }

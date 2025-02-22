@@ -13,6 +13,9 @@ import CustomButton from "@/src/components/ui/CustomButton";
 import "../../global.css";
 import { router } from "expo-router";
 import { icons } from "@/src/constants";
+import React from "react";
+import { StateContext } from "@/src/providers/StateContext";
+import { AppwriteService } from "@/src/appwrite/AppwriteService";
 
 export default function signin() {
   const [email, setEmail] = useState("");
@@ -20,6 +23,9 @@ export default function signin() {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
+
+  const { isLoading, setIsLogin, setIsLoading, setUserId } =
+    React.useContext(StateContext);
 
   const validateInputs = (email: string, password: string) => {
     let errors: { email?: string; password?: string } = {};
@@ -44,29 +50,28 @@ export default function signin() {
   function handleSignIn() {
     const validationErrors = validateInputs(email, password);
     setErrors(validationErrors);
-    console.log(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-      console.log("Login successful with:", { email, password });
+    if (Object.keys(validationErrors).length !== 0) {
+      return;
     }
-    /*
+
+    setIsLoading(true);
     const promise = AppwriteService.getInstance()
       .createSession(email, password)
       .then();
 
     promise.then(
       function (response) {
-        response.userId;
-        response.current;
-        console.log(JSON.stringify(response)); // Success
+        setIsLoading(false);
+        setIsLogin(true);
+        setUserId(response.userId);
+        router.push("/(tabs)/today");
       },
       function (error) {
+        setIsLoading(false);
         console.log("Error : " + error); // Failure
       }
     );
-    */
-
-    //router.push("/(tabs)/today");
   }
 
   function handleSignUp() {
@@ -120,7 +125,7 @@ export default function signin() {
           title="Sign In"
           handlePress={handleSignIn}
           containerStyles="mt-7"
-          isLoading={true}
+          isLoading={isLoading}
         />
 
         <TouchableOpacity onPress={() => {}}>
