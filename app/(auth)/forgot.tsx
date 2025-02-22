@@ -4,14 +4,46 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import FormField from "@/src/components/ui/FormField";
 import CustomButton from "@/src/components/ui/CustomButton";
 import { router } from "expo-router";
+import { AppwriteService } from "@/src/appwrite/AppwriteService";
 
 const forgot = () => {
   const [email, setEmail] = useState("");
+
+  const handleResetPassword = async () => {
+    if (email === "") {
+      Alert.alert("Error", "Email is required");
+      return;
+    }
+
+    if (!email.includes("@") || !email.includes(".")) {
+      Alert.alert("Error", "Invalid email");
+      return;
+    }
+
+    const promise = AppwriteService.getInstance().createRecovery(
+      email,
+      "dailydose://reset-password"
+    );
+
+    promise.then(
+      function (response) {
+        console.log(response); // Success
+      },
+      function (error) {
+        console.log(error); // Failure
+      }
+    );
+    Alert.alert(
+      "Success",
+      "Check your email for reset password, open email from this phone and click on the link to reset password"
+    );
+  };
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -47,7 +79,10 @@ const forgot = () => {
         <CustomButton
           title="Reset passcode"
           handlePress={() => {
-            router.back();
+            Alert.alert(
+              "Alert",
+              "This feature is not available yet, please send email to me(rajarajan.abathsagayam@gmail.com) for password reset"
+            );
           }}
           containerStyles="mt-7"
           isLoading={false}

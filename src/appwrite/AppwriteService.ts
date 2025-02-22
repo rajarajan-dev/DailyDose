@@ -45,4 +45,18 @@ export class AppwriteService {
   public async updatePassword(password: string, oldPassword: string) {
     return this.account.updatePassword(password, oldPassword);
   }
+
+  //update recorvery
+  public async updateRecovery(
+    userId: string,
+    secret: string,
+    password: string
+  ) {
+    return this.account.updateRecovery(userId, secret, password);
+  }
+
+  // create recovery
+  public async createRecovery(email: string, url: string) {
+    return this.account.createRecovery(email, url);
+  }
 }
