@@ -1,13 +1,16 @@
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import SupportUs from "@/src/components/ui/SupportUs";
+import { StateContext } from "@/src/providers/StateContext";
 import { Link, Redirect, router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 
 const ProfileScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+
+  const { userId } = useContext(StateContext);
 
   useEffect(() => {
     setIsLoading(true);
@@ -37,6 +40,7 @@ const ProfileScreen = () => {
   }
 
   const handleLogout = () => {
+    console.log("UserId " + userId);
     AppwriteService.getInstance().closeSession();
     router.push("/(auth)/sign-in");
   };

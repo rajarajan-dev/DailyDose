@@ -173,4 +173,5 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    implementation("io.appwrite:sdk-for-android:6.1.0")
 }

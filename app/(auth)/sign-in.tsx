@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormField from "@/src/components/ui/FormField";
 import CustomButton from "@/src/components/ui/CustomButton";
 import "../../global.css";
@@ -17,10 +17,13 @@ import { icons } from "@/src/constants";
 import React from "react";
 import { StateContext } from "@/src/providers/StateContext";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
+import * as SecureStore from "expo-secure-store";
 
 export default function signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
@@ -48,7 +51,7 @@ export default function signin() {
     router.push("/forgot");
   }
 
-  function handleSignIn() {
+  const handleSignIn = async () => {
     const validationErrors = validateInputs(email, password);
     setErrors(validationErrors);
 
@@ -56,7 +59,18 @@ export default function signin() {
       return;
     }
 
+    if (rememberMe) {
+      // Save credentials to secure storage
+      await SecureStore.setItemAsync("email", email);
+      await SecureStore.setItemAsync("password", password);
+    } else {
+      // Remove saved credentials
+      await SecureStore.deleteItemAsync("email");
+      await SecureStore.deleteItemAsync("password");
+    }
+
     setIsLoading(true);
+    AppwriteService.getInstance().closeSession();
     const promise = AppwriteService.getInstance()
       .createSession(email, password)
       .then();
@@ -73,7 +87,22 @@ export default function signin() {
         Alert.alert("Sign In", error.message);
       }
     );
-  }
+  };
+
+  // Load saved credentials on component mount
+  useEffect(() => {
+    const loadCredentials = async () => {
+      const savedEmail = await SecureStore.getItemAsync("email");
+      const savedPassword = await SecureStore.getItemAsync("password");
+      if (savedEmail && savedPassword) {
+        setEmail(savedEmail);
+        setPassword(savedPassword);
+        setRememberMe(true);
+      }
+    };
+
+    loadCredentials();
+  }, []);
 
   function handleSignUp() {
     router.push("/(auth)/sign-up");
@@ -129,10 +158,14 @@ export default function signin() {
           isLoading={isLoading}
         />
 
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => {
+            setRememberMe(!rememberMe);
+          }}
+        >
           <View className="flex mt-4 flex-row justify-end">
             <Image
-              source={icons.checked}
+              source={rememberMe ? icons.checked : icons.unchecked}
               height={10}
               width={10}
               resizeMode="contain"
