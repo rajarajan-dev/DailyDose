@@ -31,7 +31,7 @@ export default function signin() {
   const { isLoading, setIsLogin, setIsLoading, setUserId } =
     React.useContext(StateContext);
 
-  const validateInputs = (email: string, password: string) => {
+  const validateInputs = () => {
     let errors: { email?: string; password?: string } = {};
 
     if (!email.trim()) {
@@ -52,7 +52,7 @@ export default function signin() {
   }
 
   const handleSignIn = async () => {
-    const validationErrors = validateInputs(email, password);
+    const validationErrors = validateInputs();
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length !== 0) {
@@ -63,23 +63,28 @@ export default function signin() {
       // Save credentials to secure storage
       await SecureStore.setItemAsync("email", email);
       await SecureStore.setItemAsync("password", password);
+      await SecureStore.setItemAsync("rememberme", rememberMe.toString());
     } else {
       // Remove saved credentials
       await SecureStore.deleteItemAsync("email");
       await SecureStore.deleteItemAsync("password");
+      await SecureStore.deleteItemAsync("rememberme");
     }
 
     setIsLoading(true);
-    AppwriteService.getInstance().closeSession();
-    const promise = AppwriteService.getInstance()
-      .createSession(email, password)
-      .then();
+    const sessionId = await SecureStore.getItemAsync("sessionid");
+    AppwriteService.getInstance().closeSession(sessionId || "");
+    const promise = AppwriteService.getInstance().createSession(
+      email,
+      password
+    );
 
     promise.then(
-      function (response) {
+      async function (response) {
         setIsLoading(false);
         setIsLogin(true);
         setUserId(response.userId);
+        await SecureStore.setItemAsync("sessionid", response.$id);
         router.push("/(tabs)/today");
       },
       function (error) {
@@ -94,10 +99,15 @@ export default function signin() {
     const loadCredentials = async () => {
       const savedEmail = await SecureStore.getItemAsync("email");
       const savedPassword = await SecureStore.getItemAsync("password");
+      const rememberMe = await SecureStore.getItemAsync("rememberme");
       if (savedEmail && savedPassword) {
         setEmail(savedEmail);
         setPassword(savedPassword);
-        setRememberMe(true);
+        if (rememberMe && rememberMe === "true") {
+          setRememberMe(true);
+        } else {
+          setRememberMe(false);
+        }
       }
     };
 

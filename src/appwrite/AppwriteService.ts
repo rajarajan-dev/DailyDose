@@ -37,7 +37,12 @@ export class AppwriteService {
   }
 
   // user sign out
-  public async closeSession() {
-    this.account.deleteSession("current");
+  public async closeSession(sessionId: string) {
+    this.account.deleteSession(sessionId);
+  }
+
+  // update user password
+  public async updatePassword(password: string, oldPassword: string) {
+    return this.account.updatePassword(password, oldPassword);
   }
 }

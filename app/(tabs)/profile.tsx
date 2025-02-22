@@ -1,5 +1,6 @@
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import SupportUs from "@/src/components/ui/SupportUs";
+import useSessionCleanup from "@/src/hooks/useSessionCleanup";
 import { StateContext } from "@/src/providers/StateContext";
 import { Link, Redirect, router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
@@ -11,6 +12,7 @@ const ProfileScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const { userId } = useContext(StateContext);
+  const { clearSessionAndCredentials, isClearing } = useSessionCleanup();
 
   useEffect(() => {
     setIsLoading(true);
@@ -29,7 +31,7 @@ const ProfileScreen = () => {
       });
   }, []);
 
-  if (isLoading) {
+  if (isLoading || isClearing) {
     return (
       <SafeAreaView className="bg-primary h-full">
         <Text className="text-white font-pmedium text-center mt-2">
@@ -41,7 +43,7 @@ const ProfileScreen = () => {
 
   const handleLogout = () => {
     console.log("UserId " + userId);
-    AppwriteService.getInstance().closeSession();
+    clearSessionAndCredentials();
     router.push("/(auth)/sign-in");
   };
 
