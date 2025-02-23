@@ -1,7 +1,9 @@
+import ChipView from "@/src/components/ui/ChipView";
 import CustomButton from "@/src/components/ui/CustomButton";
 import FormField from "@/src/components/ui/FormField";
+import FormFieldMultipleLine from "@/src/components/ui/FormFieldMultipleLine";
 import { useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TextInput } from "react-native";
 
 const AddDrugsScreen = () => {
   const [forms, setForms] = useState({
@@ -29,7 +31,7 @@ const AddDrugsScreen = () => {
             keyboardType="default"
             placeholder="Drug Name"
           />
-          <FormField
+          <FormFieldMultipleLine
             title="Description"
             value={forms.description}
             handleChangeText={(value) => {
@@ -39,6 +41,7 @@ const AddDrugsScreen = () => {
             keyboardType="default"
             placeholder="Description"
           />
+
           <FormField
             title="Dosage"
             value={forms.dosage}
@@ -49,26 +52,63 @@ const AddDrugsScreen = () => {
             keyboardType="default"
             placeholder="Dosage"
           />
-          <FormField
-            title="Timing"
-            value={forms.timing}
-            handleChangeText={(value) => {
-              setForms({ ...forms, timing: value });
-            }}
-            otherStyles="mt-4"
-            keyboardType="default"
-            placeholder="Timing"
-          />
-          <FormField
-            title="Taken"
-            value={forms.taken}
-            handleChangeText={(value) => {
-              setForms({ ...forms, taken: value });
-            }}
-            otherStyles="mt-4"
-            keyboardType="default"
-            placeholder="Taken"
-          />
+
+          <View className="mt-4">
+            <Text className="text-base text-gray-100 font-pmedium mt-4 mb-2">
+              Taken
+            </Text>
+            <View className="flex-row">
+              <ChipView
+                label="Before Meal"
+                isSelected={true}
+                onPress={() => {}}
+                layoutStyle={"ml-4"}
+                textStyle={""}
+              />
+              <ChipView
+                label="After Meal"
+                isSelected={false}
+                onPress={() => {}}
+                layoutStyle={"ml-4"}
+                textStyle={""}
+              />
+            </View>
+          </View>
+          <View className="mt-4">
+            <Text className="text-base text-gray-100 font-pmedium mt-4 mb-2">
+              Timing
+            </Text>
+            <View className="flex-row justify-between">
+              <ChipView
+                label="Morning"
+                isSelected={true}
+                onPress={() => {}}
+                layoutStyle={"ml-2"}
+                textStyle={""}
+              />
+              <ChipView
+                label="Afternoon"
+                isSelected={false}
+                onPress={() => {}}
+                layoutStyle={"ml-2"}
+                textStyle={""}
+              />
+              <ChipView
+                label="Evening"
+                isSelected={false}
+                onPress={() => {}}
+                layoutStyle={"ml-2"}
+                textStyle={""}
+              />
+              <ChipView
+                label="Night"
+                isSelected={false}
+                onPress={() => {}}
+                layoutStyle={"ml-2"}
+                textStyle={""}
+              />
+            </View>
+          </View>
           <FormField
             title="Start Date"
             value={forms.startDate}
