@@ -3,9 +3,17 @@ import CustomButton from "@/src/components/ui/CustomButton";
 import FormField from "@/src/components/ui/FormField";
 import FormFieldMultipleLine from "@/src/components/ui/FormFieldMultipleLine";
 import { useState } from "react";
-import { View, Text, ScrollView, TextInput } from "react-native";
-
+import { View, Text, ScrollView, TextInput, Button } from "react-native";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 const AddDrugsScreen = () => {
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(
+    new Date(new Date().setDate(new Date().getDate() + 1))
+  );
+  // Set endDate to the next day
+
   const [forms, setForms] = useState({
     name: "",
     description: "",
@@ -16,6 +24,16 @@ const AddDrugsScreen = () => {
     endDate: "",
     doctor: "",
   });
+
+  const onStartDateChange = (event: DateTimePickerEvent, date?: Date) => {
+    const currentDate = date || startDate;
+    setStartDate(currentDate);
+  };
+
+  const onEndDateChange = (event: DateTimePickerEvent, date?: Date) => {
+    const currentDate = date || endDate;
+    setEndDate(currentDate);
+  };
 
   return (
     <View className="flex-1 bg-primary">
@@ -109,26 +127,34 @@ const AddDrugsScreen = () => {
               />
             </View>
           </View>
-          <FormField
-            title="Start Date"
-            value={forms.startDate}
-            handleChangeText={(value) => {
-              setForms({ ...forms, startDate: value });
-            }}
-            otherStyles="mt-4"
-            keyboardType="default"
-            placeholder="Start Date"
-          />
-          <FormField
-            title="End Date"
-            value={forms.endDate}
-            handleChangeText={(value) => {
-              setForms({ ...forms, endDate: value });
-            }}
-            otherStyles="mt-4"
-            keyboardType="default"
-            placeholder="End Date"
-          />
+          <View className={`space-y-0 mt-4`}>
+            <Text className="text-base text-gray-100 font-pmedium">
+              Start Date
+            </Text>
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={startDate}
+              mode="date"
+              is24Hour={false}
+              onChange={onStartDateChange}
+              themeVariant="dark"
+            />
+          </View>
+
+          <View className={`space-y-0 mt-4`}>
+            <Text className="text-base text-gray-100 font-pmedium">
+              End Date
+            </Text>
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={endDate}
+              mode="date"
+              is24Hour={false}
+              onChange={onEndDateChange}
+              themeVariant="dark"
+            />
+          </View>
+
           <FormField
             title="Doctor"
             value={forms.doctor}
