@@ -2,28 +2,21 @@ import ChipView from "@/src/components/ui/ChipView";
 import CustomButton from "@/src/components/ui/CustomButton";
 import FormField from "@/src/components/ui/FormField";
 import FormFieldMultipleLine from "@/src/components/ui/FormFieldMultipleLine";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { View, Text, ScrollView, Alert } from "react-native";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import formatDate from "@/src/helper/formatDate";
+import { DrugDocument, DrugDocumentWithUser } from "@/src/types/DrugDocument";
+import { AppwriteService } from "@/src/appwrite/AppwriteService";
 const AddDrugsScreen = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(
     new Date(new Date().setDate(new Date().getDate() + 1))
   );
 
-  const [forms, setForms] = useState<{
-    name: string;
-    description: string;
-    dosage: string;
-    timing: string[];
-    taken: string;
-    startDate: string;
-    endDate: string;
-    doctor: string;
-  }>({
+  const [forms, setForms] = useState<DrugDocument>({
     name: "",
     description: "",
     dosage: "",
@@ -37,29 +30,29 @@ const AddDrugsScreen = () => {
   const timingsOptions = ["Breakfast", "Lunch", "Evening", "Night"];
 
   const onStartDateChange = (event: DateTimePickerEvent, date?: Date) => {
-    const currentDate = date || startDate;
-    setStartDate(currentDate);
-    setForms({ ...forms, startDate: formatDate(startDate) });
+    if (!date) return;
+    setStartDate(date);
+    setForms({ ...forms, startDate: formatDate(date) });
   };
 
   const onEndDateChange = (event: DateTimePickerEvent, date?: Date) => {
-    const currentDate = date || endDate;
-    setEndDate(currentDate);
-    setForms({ ...forms, endDate: formatDate(endDate) });
+    if (!date) return;
+    setEndDate(date);
+    setForms({ ...forms, endDate: formatDate(date) });
   };
 
-  const handleTaken = (taken: string) => {
-    setForms({ ...forms, taken: taken });
-  };
+  const handleTaken = useCallback((taken: string) => {
+    setForms((prev) => ({ ...prev, taken }));
+  }, []); // No dependencies → function never recreates
 
-  const handleTiming = (timing: string) => {
+  const handleTiming = useCallback((timing: string) => {
     setForms((prev) => ({
       ...prev,
       timing: prev.timing.includes(timing)
-        ? prev.timing.filter((t) => t !== timing) // Remove if already selected
-        : [...prev.timing, timing], // Add if not selected
+        ? prev.timing.filter((t) => t !== timing)
+        : [...prev.timing, timing],
     }));
-  };
+  }, []);
 
   const validateForm = () => {
     const errors: Record<string, string> = {};
@@ -82,15 +75,44 @@ const AddDrugsScreen = () => {
 
   const handleSubmit = () => {
     const errors = validateForm();
-
     if (Object.keys(errors).length > 0) {
-      console.log("Validation Errors:", errors);
-      const errorMessage = Object.values(errors).join("\n");
-      Alert.alert("Validation Error", errorMessage);
-    } else {
-      console.log("Form submitted successfully:", forms);
-      // Proceed with form submission
+      Alert.alert("Validation Error", Object.values(errors).join("\n"));
+      return;
     }
+
+    if (!forms) {
+      console.error("Forms data is missing!");
+      return;
+    }
+
+    AppwriteService.getInstance()
+      .getAccount()
+      .then(function (response) {
+        const userId = response.$id;
+        // Combine the objects
+        const drugDocWithUser: DrugDocumentWithUser = {
+          name: forms.name,
+          description: forms.description,
+          dosage: forms.dosage,
+          timing: forms.timing,
+          canbetaken: forms.taken === "Before Food" ? "before" : "after",
+          startdate: new Date(startDate).toISOString(),
+          enddate: new Date(endDate).toISOString(),
+          doctor: forms.doctor,
+          user_id: userId, // Add user_id
+          taken: false,
+        };
+
+        console.log("canbetaken value:", drugDocWithUser.canbetaken);
+
+        return AppwriteService.getInstance().addDrugDocument(drugDocWithUser);
+      })
+      .then((response) => {
+        console.log("Success:", response);
+      })
+      .catch((error) => {
+        console.error("Error fetching user:", error);
+      });
   };
 
   return (
@@ -162,50 +184,16 @@ const AddDrugsScreen = () => {
               <Text className="text-red text-base">*</Text>
             </Text>
             <View className="flex-row justify-between">
-              <ChipView
-                label={timingsOptions[0]}
-                isSelected={
-                  forms.timing.findIndex((f) => f === timingsOptions[0]) != -1
-                }
-                onPress={() => {
-                  handleTiming(timingsOptions[0]);
-                }}
-                layoutStyle={"ml-2"}
-                textStyle={""}
-              />
-              <ChipView
-                label={timingsOptions[1]}
-                isSelected={
-                  forms.timing.findIndex((f) => f === timingsOptions[1]) != -1
-                }
-                onPress={() => {
-                  handleTiming(timingsOptions[1]);
-                }}
-                layoutStyle={"ml-2"}
-                textStyle={""}
-              />
-              <ChipView
-                label={timingsOptions[2]}
-                isSelected={
-                  forms.timing.findIndex((f) => f === timingsOptions[2]) != -1
-                }
-                onPress={() => {
-                  handleTiming(timingsOptions[2]);
-                }}
-                layoutStyle={"ml-2"}
-                textStyle={""}
-              />
-              <ChipView
-                label={timingsOptions[3]}
-                isSelected={
-                  forms.timing.findIndex((f) => f === timingsOptions[3]) != -1
-                }
-                onPress={() => {
-                  handleTiming(timingsOptions[3]);
-                }}
-                layoutStyle={"ml-2"}
-                textStyle={""}
-              />
+              {timingsOptions.map((option) => (
+                <ChipView
+                  key={option}
+                  label={option}
+                  isSelected={forms.timing.includes(option)}
+                  onPress={() => handleTiming(option)}
+                  layoutStyle="ml-2"
+                  textStyle=""
+                />
+              ))}
             </View>
           </View>
           <View className={`space-y-0 mt-4`}>

@@ -45,7 +45,7 @@ export default function RootLayout() {
           name="add-drug"
           options={{
             headerShown: true,
-            title: "Add Drugs",
+            title: "Add Drug",
             headerBackTitle: "Back",
           }}
         />

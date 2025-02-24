@@ -1,16 +1,24 @@
-import { Client, Account, ID } from "react-native-appwrite";
+import { Client, Account, ID, Databases } from "react-native-appwrite";
+import { DrugDocument, DrugDocumentWithUser } from "../types/DrugDocument";
 
 export class AppwriteService {
   private static instance: AppwriteService;
   private account: Account;
   private client: Client;
+  private databases: Databases;
+
+  private DATABASE_ID: string = "67b8107f002be5333ca2";
+  private DRUG_COL_ID: string = "67b8119f002689a0fa99";
+
   private constructor() {
     const client = new Client()
       .setProject("67b42a000009a1c7ef34")
       .setPlatform("com.rajarajan.dailydose");
     this.client = client;
+    this.databases = new Databases(client);
     this.account = new Account(client);
   }
+
   public static getInstance(): AppwriteService {
     if (!AppwriteService.instance) {
       AppwriteService.instance = new AppwriteService();
@@ -58,5 +66,14 @@ export class AppwriteService {
   // create recovery
   public async createRecovery(email: string, url: string) {
     return this.account.createRecovery(email, url);
+  }
+
+  public async addDrugDocument(drug: DrugDocumentWithUser) {
+    return this.databases.createDocument(
+      this.DATABASE_ID,
+      this.DRUG_COL_ID,
+      ID.unique(),
+      drug
+    );
   }
 }
