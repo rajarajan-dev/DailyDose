@@ -73,13 +73,8 @@ const AddDrugsScreen = () => {
     if (!forms.endDate.trim()) errors.endDate = "End date is required.";
 
     // Date validation: endDate should be same or after startDate
-    if (forms.startDate && forms.endDate) {
-      const start = new Date(forms.startDate);
-      const end = new Date(forms.endDate);
-
-      if (end < start) {
-        errors.endDate = "End date cannot be before the start date.";
-      }
+    if (endDate < startDate) {
+      errors.endDate = "End date cannot be before the start date.";
     }
 
     return errors; // Returns an object with error messages
