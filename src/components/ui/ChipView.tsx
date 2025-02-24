@@ -26,7 +26,7 @@ const ChipView: React.FC<ChipViewProps> = ({
         <Text
           className={` ${
             isSelected ? "text-black" : "text-slate-100"
-          } font-psemibold text-base ${textStyle}`}
+          } font-pregular text-base ${textStyle}`}
         >
           {label}
         </Text>

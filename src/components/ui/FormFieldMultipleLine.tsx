@@ -31,14 +31,12 @@ const FormFieldMultipleLine: React.FC<FormFieldMultipleLineProps> = ({
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"
           multiline={true}
-          onChangeText={() => {
-            handleChangeText(value);
-          }}
+          onChangeText={handleChangeText}
           keyboardType="default"
           maxLength={100}
         />
         {/* Counter with absolute positioning */}
-        <View className="absolute bottom-2 right-4 px-2 py-1 rounded">
+        <View className="absolute bottom-2 right-2 px-1 py-1 rounded">
           <Text className="text-gray-50 font-pmedium text-sm opacity-60">
             {value.length}/100
           </Text>
