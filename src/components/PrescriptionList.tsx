@@ -1,13 +1,13 @@
-import { View, Text, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import React from "react";
-import { prescription } from "../types/prescription";
 import TodayDrugCard from "./TodayDrugCard";
 import DisplayDrugCard from "./DisplayDrugCard";
+import { DrugDocumentWithUser } from "../types/DrugDocument";
 
 interface PrescriptionListProps {
-  data: prescription[];
-  handleTaken: (item: prescription) => void;
-  handleNotTaken: (item: prescription) => void;
+  data: DrugDocumentWithUser[] | undefined;
+  handleTaken: (item: DrugDocumentWithUser) => void;
+  handleNotTaken: (item: DrugDocumentWithUser) => void;
   cardType: "today" | "display";
 }
 const PrescriptionList: React.FC<PrescriptionListProps> = ({
@@ -16,25 +16,35 @@ const PrescriptionList: React.FC<PrescriptionListProps> = ({
   handleNotTaken,
   cardType,
 }) => {
-  const renderTodayDrugCardItem = ({ item }: { item: prescription }) => (
+  const renderTodayDrugCardItem = ({
+    item,
+  }: {
+    item: DrugDocumentWithUser;
+  }) => (
     <TodayDrugCard
       name={item.name}
       description={item.description}
-      timing={"Morning, Lunch, Evening, Night"}
+      timing={item.timing.join(",")}
+      canBeTaken={item.canbetaken}
       taken={item.taken}
       handleTaken={() => handleTaken(item)}
       handleNotTaken={() => handleNotTaken(item)}
     />
   );
 
-  const renderDisplayDrugCardItem = ({ item }: { item: prescription }) => (
+  const renderDisplayDrugCardItem = ({
+    item,
+  }: {
+    item: DrugDocumentWithUser;
+  }) => (
     <DisplayDrugCard
       name={item.name}
       description={item.description}
-      timing={"Morning, Lunch, Evening, Night"}
+      timing={item.timing.join(",")}
+      canBeTaken={item.canbetaken}
       taken={item.taken}
-      startDate={item.startDate}
-      endDate={item.endDate}
+      startDate={item.startdate}
+      endDate={item.enddate}
       doctor={item.doctor}
     />
   );
@@ -47,7 +57,7 @@ const PrescriptionList: React.FC<PrescriptionListProps> = ({
           ? renderTodayDrugCardItem
           : renderDisplayDrugCardItem
       }
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.$id}
     />
   );
 };

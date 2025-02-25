@@ -1,13 +1,50 @@
+import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import PrescriptionList from "@/src/components/PrescriptionList";
 import CustomButton from "@/src/components/ui/CustomButton";
-import { prescriptions } from "@/src/mocks/prescriptionsdata";
+import { DrugDocumentWithUser } from "@/src/types/DrugDocument";
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 
 const ManageScreen = () => {
+  const [data, setData] = useState<DrugDocumentWithUser[]>();
   const handleAddDrug = () => {
     router.push("/add-drug");
   };
+
+  useEffect(() => {
+    AppwriteService.getInstance()
+      .getAccount()
+      .then(function (response) {
+        const userId = response.$id;
+        return AppwriteService.getInstance().getListOfDrugs(userId);
+      })
+      .then((response) => {
+        console.log("Success:", response);
+        console.log(response);
+        // Convert response to TypeScript model
+        const drugList: DrugDocumentWithUser[] = response.documents.map(
+          (doc) => ({
+            $id: doc.$id,
+            name: doc.name,
+            description: doc.description,
+            dosage: doc.dosage,
+            timing: doc.timing,
+            canbetaken: doc.canbetaken,
+            startdate: doc.startdate,
+            enddate: doc.enddate,
+            doctor: doc.doctor,
+            user_id: doc.user_id,
+            taken: doc.taken,
+          })
+        );
+        setData(drugList);
+      })
+      .catch((error) => {
+        console.error("Error fetching user:", error);
+      });
+  }, []);
+
   return (
     <SafeAreaView className="bg-primary flex-1">
       <View className="flex-1">
@@ -18,9 +55,9 @@ const ManageScreen = () => {
         </View>
 
         <PrescriptionList
-          data={prescriptions}
-          handleTaken={() => {}}
-          handleNotTaken={() => {}}
+          data={data}
+          handleTaken={(item: DrugDocumentWithUser) => {}}
+          handleNotTaken={(item: DrugDocumentWithUser) => {}}
           cardType="display"
         />
 

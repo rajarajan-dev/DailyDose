@@ -1,10 +1,11 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
 interface DisplayDrugCardProps {
   name: string;
   description: string;
   timing: string;
-  taken: string;
+  taken: boolean;
+  canBeTaken: string;
   startDate: string;
   endDate: string;
   doctor: string;

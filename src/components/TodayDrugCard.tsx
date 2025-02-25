@@ -4,7 +4,8 @@ interface TodayDrugCardProps {
   name: string;
   description: string;
   timing: string;
-  taken: string;
+  canBeTaken: string;
+  taken: boolean;
   handleTaken: () => void;
   handleNotTaken: () => void;
 }
@@ -13,6 +14,7 @@ const TodayDrugCard: React.FC<TodayDrugCardProps> = ({
   name,
   description,
   timing,
+  canBeTaken,
   taken,
   handleTaken,
   handleNotTaken,
@@ -26,16 +28,27 @@ const TodayDrugCard: React.FC<TodayDrugCardProps> = ({
         <Text className="text-gray-500 font-psemibold text-base">{timing}</Text>
       </Text>
       <Text className="text-gray-600 font-psemibold text-xl mt-1">
-        Taken:{" "}
-        <Text className="text-gray-500 font-psemibold text-base">{taken}</Text>
+        Should Taken:{" "}
+        <Text className="text-gray-500 font-psemibold text-base">
+          {canBeTaken}
+        </Text>
       </Text>
-      <View className="flex-row justify-between mt-4">
-        <TouchableOpacity className="bg-red-500 px-4 py-2 rounded">
-          <Text className="text-white font-bold">Not Taken</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-green-500 px-4 py-2 rounded">
-          <Text className="text-white font-bold">Taken</Text>
-        </TouchableOpacity>
+      <View className="flex-row justify-end mt-4">
+        {taken ? (
+          <TouchableOpacity
+            className="bg-red-500 px-4 py-2 rounded"
+            onPress={handleTaken}
+          >
+            <Text className="text-white font-bold">Not Taken</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            className="bg-green-500 px-4 py-2 rounded"
+            onPress={handleNotTaken}
+          >
+            <Text className="text-white font-bold">Taken</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

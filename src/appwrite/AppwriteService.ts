@@ -1,4 +1,4 @@
-import { Client, Account, ID, Databases } from "react-native-appwrite";
+import { Client, Account, ID, Databases, Query } from "react-native-appwrite";
 import { DrugDocument, DrugDocumentWithUser } from "../types/DrugDocument";
 
 export class AppwriteService {
@@ -75,5 +75,11 @@ export class AppwriteService {
       ID.unique(),
       drug
     );
+  }
+
+  public async getListOfDrugs(userId: string) {
+    return this.databases.listDocuments(this.DATABASE_ID, this.DRUG_COL_ID, [
+      Query.equal("user_id", userId),
+    ]);
   }
 }
