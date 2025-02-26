@@ -6,7 +6,7 @@ import { DrugDocumentWithUser } from "@/src/types/DrugDocument";
 import useDrugs from "@/src/hooks/useDrugs";
 
 export default function TodayScreen() {
-  const { data, loading, error } = useDrugs({ today: true });
+  const { data, loading, error } = useDrugs();
 
   const handleAddDrug = () => {
     router.push("/add-drug");

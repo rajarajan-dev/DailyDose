@@ -2,7 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import { DrugDocumentWithUser } from "@/src/types/DrugDocument";
 
-const useDrugs = () => {
+const useDrugsByFilters = (searchFilter: {
+  drugName: string;
+  startDate: string;
+  endDate: string;
+  timing: string[];
+  status: string;
+  doctor: string;
+}) => {
   const [data, setData] = useState<DrugDocumentWithUser[]>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -13,7 +20,10 @@ const useDrugs = () => {
         const account = await AppwriteService.getInstance().getAccount();
         const userId = account.$id;
         const response =
-          await AppwriteService.getInstance().getListOfDrugsforToday(userId);
+          await AppwriteService.getInstance().getListOfDrugsbyFilters(
+            userId,
+            searchFilter
+          );
 
         let drugList: DrugDocumentWithUser[] = response.documents.map(
           (doc) => ({
@@ -31,9 +41,10 @@ const useDrugs = () => {
           })
         );
 
-        console.log(drugList);
+        console.log(" User Drugs by fillter result " + drugList);
         setData(drugList);
       } catch (err) {
+        console.log(err);
         setError(err as Error);
       } finally {
         setLoading(false);
@@ -46,4 +57,4 @@ const useDrugs = () => {
   return { data, loading, error };
 };
 
-export default useDrugs;
+export default useDrugsByFilters;

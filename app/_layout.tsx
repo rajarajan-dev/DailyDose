@@ -57,6 +57,14 @@ export default function RootLayout() {
             headerBackTitle: "Back",
           }}
         />
+        <Stack.Screen
+          name="filter-drug-list"
+          options={{
+            headerShown: true,
+            title: "Filter Drugs",
+            headerBackTitle: "Back",
+          }}
+        />
       </Stack>
     </StateProvider>
   );

@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/src/components/ui/FormField";
 import ChipView from "@/src/components/ui/ChipView";
 import CustomButton from "@/src/components/ui/CustomButton";
+import { router } from "expo-router";
 
 const FilterScreen = () => {
   const timingsOptions = ["Breakfast", "Lunch", "Evening", "Night"];
@@ -61,14 +62,18 @@ const FilterScreen = () => {
       drugName,
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
-      timing,
+      timing: JSON.stringify(timing), // Convert array to string for query params
       status,
       doctor,
     };
 
-    // Navigate to the results screen with the filters
-    //navigation.navigate("ResultsScreen", { filters });
-    console.log("Filters Applied:", filters);
+    console.log("Filter " + filters);
+
+    // Navigate to the FilterScreen and pass the filters as query parameters
+    router.push({
+      pathname: "/filter-drug-list",
+      params: filters,
+    });
   };
 
   return (

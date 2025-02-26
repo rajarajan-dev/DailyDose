@@ -79,17 +79,17 @@ export class AppwriteService {
 
   public async getListOfDrugsforToday(userId: string) {
     const startOfToday = new Date(); // Current date and time
-    startOfToday.setUTCHours(0, 0, 0, 0); // Set time to 11:59:59.999 PM
+    startOfToday.setUTCHours(0, 0, 0, 0); // Set time to 00:00:00.000 (start of the day)
     console.log("Start of today " + startOfToday.toISOString());
 
     const endOfToday = new Date(); // Current date and time
-    endOfToday.setUTCHours(23, 59, 59, 999); // Set time to 11:59:59.999 PM
+    endOfToday.setUTCHours(23, 59, 59, 999); // Set time to 23:59:59.999 (end of the day)
     console.log("End of today " + endOfToday.toISOString());
 
     return this.databases.listDocuments(this.DATABASE_ID, this.DRUG_COL_ID, [
       Query.equal("user_id", userId), // Filter by user_id
-      Query.lessThanEqual("startdate", endOfToday.toISOString()), // Filter by startdate <= userDate
-      Query.greaterThanEqual("enddate", startOfToday.toISOString()), // Filter by endDate >= userDate
+      Query.lessThanEqual("startdate", endOfToday.toISOString()), // Filter by startdate <= endOfToday
+      Query.greaterThanEqual("enddate", startOfToday.toISOString()), // Filter by enddate >= startOfToday
     ]);
   }
 
@@ -107,28 +107,64 @@ export class AppwriteService {
   public async getListOfDrugsbyFilters(
     userId: string,
     searchFilter: {
-      drugName: string;
-      startDate: string;
-      endDate: string;
-      timing: string[];
-      status: string;
-      doctor: string;
+      drugName?: string;
+      startDate?: string;
+      endDate?: string;
+      timing?: string[];
+      status?: string;
+      doctor?: string;
     }
   ) {
-    const startOfToday = new Date(); // Current date and time
-    startOfToday.setUTCHours(0, 0, 0, 0); // Set time to 11:59:59.999 PM
-    console.log("Start of today " + startOfToday.toISOString());
+    // Initialize the query array with mandatory filters
+    const queries = [
+      Query.equal("user_id", userId), // Filter by user_id (mandatory)
+    ];
 
-    const endOfToday = new Date(); // Current date and time
-    endOfToday.setUTCHours(23, 59, 59, 999); // Set time to 11:59:59.999 PM
-    console.log("End of today " + endOfToday.toISOString());
+    // Add optional filters dynamically
+    if (searchFilter.drugName) {
+      queries.push(Query.equal("name", searchFilter.drugName)); // Exact match for name
+    }
 
-    return this.databases.listDocuments(this.DATABASE_ID, this.DRUG_COL_ID, [
-      Query.equal("user_id", userId), // Filter by user_id
-      Query.search("drugName", searchFilter.drugName),
-      Query.lessThanEqual("startdate", endOfToday.toISOString()), // Filter by startdate <= userDate
-      Query.greaterThanEqual("enddate", startOfToday.toISOString()), // Filter by endDate >= userDate
-      Query.contains("timing", searchFilter.timing),
-    ]);
+    if (searchFilter.startDate) {
+      // Convert startDate string to Date object
+      const startDate = new Date(searchFilter.startDate);
+
+      // Set time to 23:59:59.999 (end of the day in UTC)
+      startDate.setUTCHours(23, 59, 59, 999);
+
+      // Convert back to ISO string for the query
+      queries.push(Query.lessThanEqual("startdate", startDate.toISOString()));
+    }
+
+    if (searchFilter.endDate) {
+      // Convert endDate string to Date object
+      const endDate = new Date(searchFilter.endDate);
+
+      // Set time to 00:00:00.000 (start of the day in UTC)
+      endDate.setUTCHours(0, 0, 0, 0);
+
+      // Convert back to ISO string for the query
+      queries.push(Query.greaterThanEqual("enddate", endDate.toISOString()));
+    }
+
+    if (searchFilter.timing && searchFilter.timing.length > 0) {
+      queries.push(Query.contains("timing", searchFilter.timing));
+    }
+
+    if (searchFilter.status) {
+      const isTaken = searchFilter.status === "taken";
+      queries.push(Query.equal("taken", isTaken));
+    }
+
+    if (searchFilter.doctor) {
+      queries.push(Query.equal("doctor", searchFilter.doctor)); // Exact match for doctor
+    }
+
+    // Execute the query
+    return this.databases.listDocuments(
+      this.DATABASE_ID,
+      this.DRUG_COL_ID,
+      queries
+    );
   }
 }
