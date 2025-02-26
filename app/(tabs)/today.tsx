@@ -2,9 +2,7 @@ import CustomButton from "@/src/components/ui/CustomButton";
 import PrescriptionList from "@/src/components/PrescriptionList";
 import { router } from "expo-router";
 import { View, Text, SafeAreaView } from "react-native";
-import { useCallback, useEffect, useState } from "react";
-import { AppwriteService } from "@/src/appwrite/AppwriteService";
-import { DrugDocument, DrugDocumentWithUser } from "@/src/types/DrugDocument";
+import { DrugDocumentWithUser } from "@/src/types/DrugDocument";
 import useDrugs from "@/src/hooks/useDrugs";
 
 export default function TodayScreen() {
