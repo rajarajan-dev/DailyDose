@@ -1,119 +1,219 @@
 import { Client, Account, ID, Databases, Query } from "react-native-appwrite";
+import { APPWRITE_CONFIG } from "./config";
 import {
-  DrugDocument,
   DrugDocumentWithUser,
   DrugDocumentWithUserAndDocId,
 } from "../types/DrugDocument";
 
 export class AppwriteService {
-  private static instance: AppwriteService;
+  private static instance: AppwriteService = new AppwriteService();
   private account: Account;
   private client: Client;
   private databases: Databases;
 
-  private DATABASE_ID: string = "67b8107f002be5333ca2";
-  private DRUG_COL_ID: string = "67b8119f002689a0fa99";
-
   private constructor() {
     const client = new Client()
-      .setProject("67b42a000009a1c7ef34")
-      .setPlatform("com.rajarajan.dailydose");
+      .setProject(APPWRITE_CONFIG.PROJECT_ID)
+      .setPlatform(APPWRITE_CONFIG.PLATFORM);
     this.client = client;
     this.databases = new Databases(client);
     this.account = new Account(client);
   }
 
   public static getInstance(): AppwriteService {
-    if (!AppwriteService.instance) {
-      AppwriteService.instance = new AppwriteService();
-    }
     return AppwriteService.instance;
   }
-  // user sign in
+
   public async createSession(email: string, password: string) {
-    return this.account.createEmailPasswordSession(email, password);
+    try {
+      // Check if an active session exists
+      const activeSession = await this.getActiveSession();
+      if (activeSession) {
+        console.log("Found active session:", activeSession.$id);
+
+        // Ensure the user is authenticated before deleting the session
+        try {
+          await this.account.deleteSession(activeSession.$id);
+          console.log("Closed existing session:", activeSession.$id);
+        } catch (deleteError) {
+          console.error("Error closing session:", deleteError);
+        }
+      }
+
+      // Create a new session
+      const session = await this.account.createEmailPasswordSession(
+        email,
+        password
+      );
+      console.log("New session created:", session.$id);
+      return session;
+    } catch (error) {
+      console.error("Error creating session:", error);
+    }
   }
 
-  // user sign up
+  public async getActiveSession() {
+    try {
+      const sessions = await this.account.listSessions();
+      return sessions.sessions[0]; // Return the first active session
+    } catch (error) {
+      console.error("Error fetching active session:", error);
+      return null;
+    }
+  }
+
   public async createAccount(
     email: string,
     password: string,
     username: string
   ) {
-    return this.account.create(ID.unique(), email, password, username);
+    try {
+      return await this.account.create(ID.unique(), email, password, username);
+    } catch (error) {
+      console.error("Error creating account:", error);
+      throw new Error("Failed to create account.");
+    }
   }
 
-  // get user details
   public async getAccount() {
-    return this.account.get();
+    try {
+      return await this.account.get();
+    } catch (error) {
+      console.error("Error fetching account:", error);
+      throw new Error("Failed to fetch account.");
+    }
   }
 
-  // user sign out
   public async closeSession(sessionId: string) {
-    this.account.deleteSession(sessionId);
+    try {
+      await this.account.deleteSession(sessionId);
+    } catch (error) {
+      console.error("Error closing session:", error);
+      throw new Error("Failed to close session.");
+    }
   }
 
-  // update user password
   public async updatePassword(password: string, oldPassword: string) {
-    return this.account.updatePassword(password, oldPassword);
+    try {
+      return await this.account.updatePassword(password, oldPassword);
+    } catch (error) {
+      console.error("Error updating password:", error);
+      throw new Error("Failed to update password.");
+    }
   }
 
-  //update recorvery
   public async updateRecovery(
     userId: string,
     secret: string,
     password: string
   ) {
-    return this.account.updateRecovery(userId, secret, password);
+    try {
+      return await this.account.updateRecovery(userId, secret, password);
+    } catch (error) {
+      console.error("Error updating recovery:", error);
+      throw new Error("Failed to update recovery.");
+    }
   }
 
-  // create recovery
   public async createRecovery(email: string, url: string) {
-    return this.account.createRecovery(email, url);
+    try {
+      return await this.account.createRecovery(email, url);
+    } catch (error) {
+      console.error("Error creating recovery:", error);
+      throw new Error("Failed to create recovery.");
+    }
   }
 
   public async deleteDrugDocument(id: string) {
-    return this.databases.deleteDocument(
-      this.DATABASE_ID,
-      this.DRUG_COL_ID,
-      id
-    );
+    try {
+      return await this.databases.deleteDocument(
+        APPWRITE_CONFIG.DATABASE_ID,
+        APPWRITE_CONFIG.DRUG_COL_ID,
+        id
+      );
+    } catch (error) {
+      console.error("Error deleting drug document:", error);
+      throw new Error("Failed to delete drug document.");
+    }
   }
 
   public async getDrugDocumentById(id: string) {
-    return this.databases.getDocument(this.DATABASE_ID, this.DRUG_COL_ID, id);
+    try {
+      return await this.databases.getDocument(
+        APPWRITE_CONFIG.DATABASE_ID,
+        APPWRITE_CONFIG.DRUG_COL_ID,
+        id
+      );
+    } catch (error) {
+      console.error("Error fetching drug document:", error);
+      throw new Error("Failed to fetch drug document.");
+    }
   }
 
   public async updateDrugDocument(drug: DrugDocumentWithUserAndDocId) {
-    return this.databases.updateDocument(
-      this.DATABASE_ID,
-      this.DRUG_COL_ID,
-      drug.$id,
-      drug
-    );
+    try {
+      return await this.databases.updateDocument(
+        APPWRITE_CONFIG.DATABASE_ID,
+        APPWRITE_CONFIG.DRUG_COL_ID,
+        drug.$id,
+        drug
+      );
+    } catch (error) {
+      console.error("Error updating drug document:", error);
+      throw new Error("Failed to update drug document.");
+    }
   }
 
   public async addDrugDocument(drug: DrugDocumentWithUser) {
-    return this.databases.createDocument(
-      this.DATABASE_ID,
-      this.DRUG_COL_ID,
-      ID.unique(),
-      drug
-    );
+    try {
+      const result = await this.databases.createDocument(
+        APPWRITE_CONFIG.DATABASE_ID,
+        APPWRITE_CONFIG.DRUG_COL_ID,
+        ID.unique(),
+        drug
+      );
+      console.log("Drug document added successfully:", result);
+      return result;
+    } catch (error) {
+      console.error("Error adding drug document:", error);
+      throw new Error("Failed to add drug document.");
+    }
+  }
+
+  public async getListOfDrugsforUser(userId: string) {
+    try {
+      return await this.databases.listDocuments(
+        APPWRITE_CONFIG.DATABASE_ID,
+        APPWRITE_CONFIG.DRUG_COL_ID,
+        [Query.equal("user_id", userId), Query.orderDesc("enddate")]
+      );
+    } catch (error) {
+      console.error("Error fetching drugs for user:", error);
+      throw new Error("Failed to fetch drugs for user.");
+    }
   }
 
   public async getListOfDrugsforToday(userId: string) {
-    const startOfToday = new Date(); // Current date and time
-    startOfToday.setUTCHours(0, 0, 0, 0); // Set time to 00:00:00.000 (start of the day)
+    try {
+      const startOfToday = new Date();
+      startOfToday.setUTCHours(0, 0, 0, 0);
 
-    const endOfToday = new Date(); // Current date and time
-    endOfToday.setUTCHours(23, 59, 59, 999); // Set time to 23:59:59.999 (end of the day)
+      const endOfToday = new Date();
+      endOfToday.setUTCHours(23, 59, 59, 999);
 
-    return this.databases.listDocuments(this.DATABASE_ID, this.DRUG_COL_ID, [
-      Query.equal("user_id", userId), // Filter by user_id
-      Query.lessThanEqual("startdate", endOfToday.toISOString()), // Filter by startdate <= endOfToday
-      Query.greaterThanEqual("enddate", startOfToday.toISOString()), // Filter by enddate >= startOfToday
-    ]);
+      return await this.databases.listDocuments(
+        APPWRITE_CONFIG.DATABASE_ID,
+        APPWRITE_CONFIG.DRUG_COL_ID,
+        [
+          Query.equal("user_id", userId),
+          Query.lessThanEqual("startdate", endOfToday.toISOString()),
+          Query.greaterThanEqual("enddate", startOfToday.toISOString()),
+        ]
+      );
+    } catch (error) {
+      console.error("Error fetching drugs for today:", error);
+      throw new Error("Failed to fetch drugs for today.");
+    }
   }
 
   public async getListOfDrugsbyFilters(
@@ -127,61 +227,62 @@ export class AppwriteService {
       doctor?: string;
     }
   ) {
-    // Initialize the query array with mandatory filters
-    const queries = [
-      Query.equal("user_id", userId), // Filter by user_id (mandatory)
-    ];
+    try {
+      const queries = [Query.equal("user_id", userId)];
 
-    // Add optional filters dynamically
-    if (searchFilter.drugName) {
-      queries.push(
-        Query.or([
-          Query.startsWith("name", searchFilter.drugName), // Starts with
-          Query.contains("name", searchFilter.drugName), // Contains
-          Query.endsWith("name", searchFilter.drugName), // Ends with
-        ])
+      if (searchFilter.drugName) {
+        queries.push(
+          Query.or([
+            Query.startsWith("name", searchFilter.drugName),
+            Query.contains("name", searchFilter.drugName),
+            Query.endsWith("name", searchFilter.drugName),
+          ])
+        );
+      }
+
+      if (searchFilter.startDate && searchFilter.endDate) {
+        queries.push(
+          ...this.getDateRangeFilter(
+            searchFilter.startDate,
+            searchFilter.endDate
+          )
+        );
+      }
+
+      if (searchFilter.timing && searchFilter.timing.length > 0) {
+        queries.push(Query.contains("timing", searchFilter.timing));
+      }
+
+      if (searchFilter.status) {
+        const isTaken = searchFilter.status === "taken";
+        queries.push(Query.equal("taken", isTaken));
+      }
+
+      if (searchFilter.doctor) {
+        queries.push(Query.equal("doctor", searchFilter.doctor));
+      }
+
+      return await this.databases.listDocuments(
+        APPWRITE_CONFIG.DATABASE_ID,
+        APPWRITE_CONFIG.DRUG_COL_ID,
+        queries
       );
+    } catch (error) {
+      console.error("Error fetching drugs by filters:", error);
+      throw new Error("Failed to fetch drugs by filters.");
     }
+  }
 
-    if (searchFilter.startDate) {
-      // Convert startDate string to Date object
-      const startDate = new Date(searchFilter.startDate);
+  private getDateRangeFilter(startDate: string, endDate: string) {
+    const start = new Date(startDate);
+    start.setUTCHours(0, 0, 0, 0);
 
-      // Set time to 23:59:59.999 (end of the day in UTC)
-      startDate.setUTCHours(23, 59, 59, 999);
+    const end = new Date(endDate);
+    end.setUTCHours(23, 59, 59, 999);
 
-      // Convert back to ISO string for the query
-      queries.push(Query.lessThanEqual("startdate", startDate.toISOString()));
-    }
-
-    if (searchFilter.endDate) {
-      // Convert endDate string to Date object
-      const endDate = new Date(searchFilter.endDate);
-
-      // Set time to 00:00:00.000 (start of the day in UTC)
-      endDate.setUTCHours(0, 0, 0, 0);
-
-      // Convert back to ISO string for the query
-      queries.push(Query.greaterThanEqual("enddate", endDate.toISOString()));
-    }
-
-    if (searchFilter.timing && searchFilter.timing.length > 0) {
-      queries.push(Query.contains("timing", searchFilter.timing));
-    }
-
-    if (searchFilter.status) {
-      const isTaken = searchFilter.status === "taken";
-      queries.push(Query.equal("taken", isTaken));
-    }
-
-    if (searchFilter.doctor) {
-      queries.push(Query.equal("doctor", searchFilter.doctor)); // Exact match for doctor
-    }
-    // Execute the query
-    return this.databases.listDocuments(
-      this.DATABASE_ID,
-      this.DRUG_COL_ID,
-      queries
-    );
+    return [
+      Query.lessThanEqual("startdate", end.toISOString()),
+      Query.greaterThanEqual("enddate", start.toISOString()),
+    ];
   }
 }

@@ -15,6 +15,7 @@ import {
 } from "@/src/types/DrugDocument";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import { router, useLocalSearchParams } from "expo-router";
+import { getStringValue } from "@/src/helper/getStringValue";
 
 const AddDrugsScreen = () => {
   const { id } = useLocalSearchParams(); // Get the drug ID from the route params
@@ -24,13 +25,7 @@ const AddDrugsScreen = () => {
     new Date(new Date().setDate(new Date().getDate() + 1))
   );
 
-  // Helper function to ensure the value is a string
-  const getStringValue = (value: string | string[] | undefined): string => {
-    if (Array.isArray(value)) {
-      return value[0] || ""; // Use the first element if it's an array
-    }
-    return value || ""; // Return the value or an empty string if undefined
-  };
+ 
 
   const [forms, setForms] = useState<DrugDocument>({
     name: "",

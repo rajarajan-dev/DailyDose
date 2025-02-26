@@ -33,41 +33,59 @@ const DrugCard: React.FC<DrugCardProps> = ({
       <Text className="text-2xl font-bold font-psemibold">{name}</Text>
 
       {/* Description */}
-      <Text className="text-gray-600 font-pregular">{description}</Text>
+      {description && (
+        <Text className="text-gray-600 font-pregular">{description}</Text>
+      )}
 
       {/* Dosage */}
-      <Text className="text-gray-600 font-psemibold text-xl mt-1">
-        Dosage:{" "}
-        <Text className="text-gray-500 font-psemibold text-base">{dosage}</Text>
-      </Text>
+      {dosage && (
+        <Text className="text-gray-600 font-psemibold text-xl mt-1">
+          Dosage:{" "}
+          <Text className="text-gray-500 font-psemibold text-base">
+            {dosage}
+          </Text>
+        </Text>
+      )}
 
       {/* Timing */}
-      <Text className="text-gray-600 font-psemibold text-xl mt-1">
-        Timing:{" "}
-        <Text className="text-gray-500 font-psemibold text-base">{timing}</Text>
-      </Text>
+      {timing && (
+        <Text className="text-gray-600 font-psemibold text-xl mt-1">
+          Timing:{" "}
+          <Text className="text-gray-500 font-psemibold text-base">
+            {timing}
+          </Text>
+        </Text>
+      )}
 
       {/* Should Be Taken */}
-      <Text className="text-gray-600 font-psemibold text-xl mt-1">
-        Should Be Taken:{" "}
-        <Text className="text-gray-500 font-psemibold text-base">
-          {canBeTaken}
+      {canBeTaken && (
+        <Text className="text-gray-600 font-psemibold text-xl mt-1">
+          Should Be Taken:{" "}
+          <Text className="text-gray-500 font-psemibold text-base">
+            {canBeTaken}
+          </Text>
         </Text>
-      </Text>
+      )}
 
       {/* Prescribed By */}
-      <Text className="text-gray-600 font-psemibold text-xl mt-1">
-        Prescribed By:{" "}
-        <Text className="text-gray-500 font-psemibold text-base">{doctor}</Text>
-      </Text>
+      {doctor && (
+        <Text className="text-gray-600 font-psemibold text-xl mt-1">
+          Prescribed By:{" "}
+          <Text className="text-gray-500 font-psemibold text-base">
+            {doctor}
+          </Text>
+        </Text>
+      )}
 
       {/* Duration */}
-      <Text className="text-gray-600 font-psemibold text-xl mt-1">
-        Duration:{" "}
-        <Text className="text-gray-500 font-psemibold text-base">
-          {startdate} to {enddate}
+      {startdate && enddate && (
+        <Text className="text-gray-600 font-psemibold text-xl mt-1">
+          Duration:{" "}
+          <Text className="text-gray-500 font-psemibold text-base">
+            {startdate} to {enddate}
+          </Text>
         </Text>
-      </Text>
+      )}
 
       {/* Drug Action Buttons */}
       <View className="flex-row justify-between mt-4">

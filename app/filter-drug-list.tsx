@@ -3,18 +3,11 @@ import { useLocalSearchParams } from "expo-router";
 import useDrugsByFilters from "@/src/hooks/useDrugsByFilters";
 import PrescriptionList from "@/src/components/PrescriptionList";
 import { DrugDocumentWithUser } from "@/src/types/DrugDocument";
+import { getStringValue } from "@/src/helper/getStringValue";
 
 export default function FilterDrugListScreen() {
   // Access the filters from the query parameters
   const params = useLocalSearchParams();
-
-  // Helper function to ensure the value is a string
-  const getStringValue = (value: string | string[] | undefined): string => {
-    if (Array.isArray(value)) {
-      return value[0] || ""; // Use the first element if it's an array
-    }
-    return value || ""; // Return the value or an empty string if undefined
-  };
 
   // Parse the filters
   const filters = {

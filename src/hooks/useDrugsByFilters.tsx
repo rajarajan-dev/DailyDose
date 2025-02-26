@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
-import { DrugDocumentWithUser } from "@/src/types/DrugDocument";
+import {
+  DrugDocumentWithUserAndDocId,
+} from "@/src/types/DrugDocument";
 
 const useDrugsByFilters = (searchFilter: {
   drugName: string;
@@ -10,7 +12,7 @@ const useDrugsByFilters = (searchFilter: {
   status: string;
   doctor: string;
 }) => {
-  const [data, setData] = useState<DrugDocumentWithUser[]>();
+  const [data, setData] = useState<DrugDocumentWithUserAndDocId[]>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -25,7 +27,7 @@ const useDrugsByFilters = (searchFilter: {
             searchFilter
           );
 
-        let drugList: DrugDocumentWithUser[] = response.documents.map(
+        let drugList: DrugDocumentWithUserAndDocId[] = response.documents.map(
           (doc) => ({
             $id: doc.$id,
             name: doc.name,

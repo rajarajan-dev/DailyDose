@@ -1,47 +1,30 @@
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import PrescriptionList from "@/src/components/PrescriptionList";
 import CustomButton from "@/src/components/ui/CustomButton";
-import { DrugDocumentWithUser } from "@/src/types/DrugDocument";
+import useDrugsManage from "@/src/hooks/useDrugsManage";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import { View, Text, SafeAreaView } from "react-native";
+import { View, Text, SafeAreaView, Alert } from "react-native";
 
 const ManageScreen = () => {
-  const [data, setData] = useState<DrugDocumentWithUser[]>();
+  const { data, loading, error, refetch } = useDrugsManage();
+
   const handleAddDrug = () => {
     router.push("/add-drug");
   };
 
-  useEffect(() => {
-    AppwriteService.getInstance()
-      .getAccount()
-      .then(function (response) {
-        const userId = response.$id;
-        return AppwriteService.getInstance().getListOfDrugsforToday(userId);
-      })
-      .then((response) => {
-        // Convert response to TypeScript model
-        const drugList: DrugDocumentWithUser[] = response.documents.map(
-          (doc) => ({
-            $id: doc.$id,
-            name: doc.name,
-            description: doc.description,
-            dosage: doc.dosage,
-            timing: doc.timing,
-            canbetaken: doc.canbetaken,
-            startdate: doc.startdate,
-            enddate: doc.enddate,
-            doctor: doc.doctor,
-            user_id: doc.user_id,
-            taken: doc.taken,
-          })
-        );
-        setData(drugList);
-      })
-      .catch((error) => {
-        console.error("Error fetching user:", error);
-      });
-  }, []);
+  const handleEditOption = (id: string) => {
+    router.push({ pathname: "/add-drug", params: { id } }); // Pass the drug ID to the AddDrugsScreen
+  };
+
+  const handleDeleteOption = async (id: string) => {
+    try {
+      await AppwriteService.getInstance().deleteDrugDocument(id);
+      refetch(); // Refresh the drug list after deletion
+    } catch (error) {
+      console.error("Error deleting drug:", error);
+      Alert.alert("Error", "Failed to delete the drug.");
+    }
+  };
 
   return (
     <SafeAreaView className="bg-primary flex-1">
@@ -54,10 +37,9 @@ const ManageScreen = () => {
 
         <PrescriptionList
           data={data}
-          handleEditOption={(item: DrugDocumentWithUser) => {}}
-          handleNotTaken={(item: DrugDocumentWithUser) => {}}
+          handleEditOption={handleEditOption}
+          handleDeleteOption={handleDeleteOption}
         />
-
         <View className="p-2">
           <CustomButton
             title="Add Drug"
