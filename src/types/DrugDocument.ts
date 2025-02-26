@@ -10,7 +10,7 @@ export interface DrugDocument {
 }
 
 export interface DrugDocumentWithUser {
-  $id?: string;
+  $id: string;
   name: string;
   description: string;
   dosage: string;

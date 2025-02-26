@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
-interface TodayDrugCardProps {
+interface DrugCardProps {
   name: string;
   description: string;
   dosage: string;
@@ -9,11 +9,9 @@ interface TodayDrugCardProps {
   startdate: string;
   enddate: string;
   doctor: string;
-  handleTaken: () => void;
-  handleNotTaken: () => void;
 }
 
-const TodayDrugCard: React.FC<TodayDrugCardProps> = ({
+const DrugCard: React.FC<DrugCardProps> = ({
   name,
   description,
   dosage,
@@ -22,8 +20,6 @@ const TodayDrugCard: React.FC<TodayDrugCardProps> = ({
   startdate,
   enddate,
   doctor,
-  handleTaken,
-  handleNotTaken,
 }) => {
   return (
     <View className="bg-white p-4 rounded-lg shadow m-2">
@@ -70,4 +66,4 @@ const TodayDrugCard: React.FC<TodayDrugCardProps> = ({
   );
 };
 
-export default TodayDrugCard;
+export default DrugCard;
