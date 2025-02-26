@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -66,6 +66,11 @@ const FilterScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-primary">
       <ScrollView className="p-4 ">
+        <View className="p-4 font-psemibold">
+          <Text className="text-white text-lg font-bold text-center">
+            Filters
+          </Text>
+        </View>
         {/* Drug Name Filter */}
         <FormField
           title="Drug Name"
@@ -80,8 +85,10 @@ const FilterScreen = () => {
         />
 
         {/* Date Range Filter */}
-        <View className="mb-4">
-          <Text className="text-lg font-bold mb-2 text-white">Date Range</Text>
+        <View className="mt-4">
+          <Text className="text-base text-gray-100 font-pmedium">
+            Date Range
+          </Text>
           <View className="flex-row justify-between">
             <DateTimePicker
               value={startDate}
@@ -103,10 +110,7 @@ const FilterScreen = () => {
 
         {/* Timing Filter */}
         <View className="mt-4">
-          <Text className="text-base text-gray-100 font-pmedium">
-            Timing
-            <Text className="text-red text-base">*</Text>
-          </Text>
+          <Text className="text-base text-gray-100 font-pmedium">Timing</Text>
           <View className="flex-row justify-between">
             {timingsOptions.map((option) => (
               <ChipView
@@ -122,8 +126,8 @@ const FilterScreen = () => {
         </View>
 
         {/* Status Filter */}
-        <View className="mb-4">
-          <Text className="text-lg font-bold mb-2 text-white">Status</Text>
+        <View className="mt-4">
+          <Text className="text-base text-gray-100 font-pmedium">Status</Text>
           <View className="flex-row">
             <ChipView
               label="Taken"
@@ -156,18 +160,18 @@ const FilterScreen = () => {
         />
 
         {/* Apply Filters Button */}
-        <View className="py-8 flex-row justify-evenly">
+        <View className="py-6 flex-row justify-evenly">
           <CustomButton
-            title="Reset Filters"
-            containerStyles="bg-secondary py-5 rounded-lg min-h-[34px] px-5"
+            title="Reset"
+            containerStyles="bg-secondary py-5 rounded-lg min-h-[25px] px-5"
             textStyles="font-pregular text-base"
             handlePress={ResetFilters}
             isLoading={false}
           />
 
           <CustomButton
-            title="Apply Filters"
-            containerStyles="bg-secondary py-5 rounded-lg min-h-[34px] px-5"
+            title="Apply"
+            containerStyles="bg-secondary py-5 rounded-lg min-h-[25px] px-5"
             textStyles="font-pregular text-base"
             handlePress={applyFilters}
             isLoading={false}
