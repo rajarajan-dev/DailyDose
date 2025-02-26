@@ -4,7 +4,6 @@ interface DisplayDrugCardProps {
   name: string;
   description: string;
   timing: string;
-  taken: boolean;
   canBeTaken: string;
   startDate: string;
   endDate: string;
@@ -15,7 +14,6 @@ const DisplayDrugCard: React.FC<DisplayDrugCardProps> = ({
   name,
   description,
   timing,
-  taken,
   startDate,
   endDate,
   doctor,
@@ -28,10 +26,7 @@ const DisplayDrugCard: React.FC<DisplayDrugCardProps> = ({
         Timing:{" "}
         <Text className="text-gray-500 font-psemibold text-base">{timing}</Text>
       </Text>
-      <Text className="text-gray-600 font-psemibold text-xl mt-1">
-        Taken:{" "}
-        <Text className="text-gray-500 font-psemibold text-base">{taken}</Text>
-      </Text>
+
       <View className="h-0.5 bg-gray-200 my-2"></View>
       <Text className="text-gray-600 font-psemibold text-xl">
         Date:{" "}

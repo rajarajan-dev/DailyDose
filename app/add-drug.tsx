@@ -100,16 +100,11 @@ const AddDrugsScreen = () => {
           enddate: new Date(endDate).toISOString(),
           doctor: forms.doctor,
           user_id: userId, // Add user_id
-          taken: false,
         };
-
-        console.log("canbetaken value:", drugDocWithUser.canbetaken);
 
         return AppwriteService.getInstance().addDrugDocument(drugDocWithUser);
       })
-      .then((response) => {
-        console.log("Success:", response);
-      })
+      .then((response) => {})
       .catch((error) => {
         console.error("Error fetching user:", error);
       });

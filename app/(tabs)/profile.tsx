@@ -42,7 +42,6 @@ const ProfileScreen = () => {
   }
 
   const handleLogout = () => {
-    console.log("UserId " + userId);
     clearSessionAndCredentials();
     router.push("/(auth)/sign-in");
   };

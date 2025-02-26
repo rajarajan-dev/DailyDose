@@ -19,17 +19,13 @@ const ResetPassword: React.FC = () => {
       );
 
       promise.then(
-        function (response) {
-          console.log(response); // Success
-        },
-        function (error) {
-          console.log(error); // Failure
-        }
+        function (response) {},
+        function (error) {}
       );
 
       Alert.alert("Success", "Your password has been reset.");
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Error", error);
     }
   };
 

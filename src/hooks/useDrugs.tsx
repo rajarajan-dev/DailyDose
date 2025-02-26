@@ -31,7 +31,6 @@ const useDrugs = () => {
           })
         );
 
-        console.log(drugList);
         setData(drugList);
       } catch (err) {
         setError(err as Error);

@@ -80,11 +80,9 @@ export class AppwriteService {
   public async getListOfDrugsforToday(userId: string) {
     const startOfToday = new Date(); // Current date and time
     startOfToday.setUTCHours(0, 0, 0, 0); // Set time to 00:00:00.000 (start of the day)
-    console.log("Start of today " + startOfToday.toISOString());
 
     const endOfToday = new Date(); // Current date and time
     endOfToday.setUTCHours(23, 59, 59, 999); // Set time to 23:59:59.999 (end of the day)
-    console.log("End of today " + endOfToday.toISOString());
 
     return this.databases.listDocuments(this.DATABASE_ID, this.DRUG_COL_ID, [
       Query.equal("user_id", userId), // Filter by user_id
@@ -122,7 +120,13 @@ export class AppwriteService {
 
     // Add optional filters dynamically
     if (searchFilter.drugName) {
-      queries.push(Query.equal("name", searchFilter.drugName)); // Exact match for name
+      queries.push(
+        Query.or([
+          Query.startsWith("name", searchFilter.drugName), // Starts with
+          Query.contains("name", searchFilter.drugName), // Contains
+          Query.endsWith("name", searchFilter.drugName), // Ends with
+        ])
+      );
     }
 
     if (searchFilter.startDate) {
@@ -159,7 +163,6 @@ export class AppwriteService {
     if (searchFilter.doctor) {
       queries.push(Query.equal("doctor", searchFilter.doctor)); // Exact match for doctor
     }
-
     // Execute the query
     return this.databases.listDocuments(
       this.DATABASE_ID,

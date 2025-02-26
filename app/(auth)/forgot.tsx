@@ -32,12 +32,8 @@ const forgot = () => {
     );
 
     promise.then(
-      function (response) {
-        console.log(response); // Success
-      },
-      function (error) {
-        console.log(error); // Failure
-      }
+      function (response) {},
+      function (error) {}
     );
     Alert.alert(
       "Success",

@@ -67,7 +67,6 @@ const FilterScreen = () => {
       doctor,
     };
 
-    console.log("Filter " + filters);
 
     // Navigate to the FilterScreen and pass the filters as query parameters
     router.push({

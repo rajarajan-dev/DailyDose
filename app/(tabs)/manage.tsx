@@ -20,8 +20,6 @@ const ManageScreen = () => {
         return AppwriteService.getInstance().getListOfDrugsforToday(userId);
       })
       .then((response) => {
-        console.log("Success:", response);
-        console.log(response);
         // Convert response to TypeScript model
         const drugList: DrugDocumentWithUser[] = response.documents.map(
           (doc) => ({

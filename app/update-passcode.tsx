@@ -52,7 +52,6 @@ const UpdatePasscode = () => {
     promise
       .then(
         function (response) {
-          console.log(response);
           router.push("/(auth)/sign-in");
         },
         function (error) {

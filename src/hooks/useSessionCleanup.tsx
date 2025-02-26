@@ -15,7 +15,6 @@ const useSessionCleanup = () => {
 
       await SecureStore.deleteItemAsync("sessionid");
 
-      console.log("Session and credentials cleared successfully.");
     } catch (error) {
       console.error("Error clearing session and credentials:", error);
     } finally {

@@ -10,12 +10,11 @@ export interface DrugDocument {
 }
 
 export interface DrugDocumentWithUser {
-  $id: string;
+  $id?: string;
   name: string;
   description: string;
   dosage: string;
   timing: string[];
-  taken: false;
   startdate: string;
   enddate: string;
   doctor: string;

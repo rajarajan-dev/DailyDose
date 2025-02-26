@@ -41,10 +41,8 @@ const useDrugsByFilters = (searchFilter: {
           })
         );
 
-        console.log(" User Drugs by fillter result " + drugList);
         setData(drugList);
       } catch (err) {
-        console.log(err);
         setError(err as Error);
       } finally {
         setLoading(false);

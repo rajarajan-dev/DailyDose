@@ -1,6 +1,8 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, SafeAreaView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import useDrugsByFilters from "@/src/hooks/useDrugsByFilters";
+import PrescriptionList from "@/src/components/PrescriptionList";
+import { DrugDocumentWithUser } from "@/src/types/DrugDocument";
 
 export default function FilterDrugListScreen() {
   // Access the filters from the query parameters
@@ -34,19 +36,24 @@ export default function FilterDrugListScreen() {
     doctor: filters.doctor,
   });
   return (
-    <View className="flex-1 bg-primary">
-      {/* Render the data or loading/error states */}
-      {loading && <Text>Loading...</Text>}
-      {error && <Text>Error: {error.message}</Text>}
-      {data && (
-        <FlatList
+    <SafeAreaView className="bg-primary flex-1">
+      <View className="flex-1">
+        <View className="p-4 font-psemibold">
+          <Text className="text-white text-lg font-bold text-center">
+            Filter Result
+          </Text>
+        </View>
+
+        {/* Render the data or loading/error states */}
+        {loading && <Text>Loading...</Text>}
+        {error && <Text>Error: {error.message}</Text>}
+        <PrescriptionList
           data={data}
-          renderItem={({ item }) => (
-            <Text className="text-white">{item.name}</Text>
-          )}
-          keyExtractor={(item) => item.$id}
+          handleTaken={(item: DrugDocumentWithUser) => {}}
+          handleNotTaken={(item: DrugDocumentWithUser) => {}}
+          cardType="today"
         />
-      )}
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
