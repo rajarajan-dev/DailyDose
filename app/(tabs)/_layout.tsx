@@ -70,15 +70,15 @@ export default function RootContainer() {
           }}
         />
         <Tabs.Screen
-          name="find"
+          name="filter"
           options={{
-            title: "Find",
+            title: "Filter",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon={icons.bookmark}
                 color={color}
-                name="Find"
+                name="Filter"
                 focused={focused}
               />
             ),

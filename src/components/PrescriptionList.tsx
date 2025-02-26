@@ -23,10 +23,14 @@ const PrescriptionList: React.FC<PrescriptionListProps> = ({
   }) => (
     <TodayDrugCard
       name={item.name}
+      dosage={item.dosage}
       description={item.description}
       timing={item.timing.join(",")}
       canBeTaken={item.canbetaken}
       taken={item.taken}
+      startdate={item.startdate}
+      enddate={item.enddate}
+      doctor={item.doctor}
       handleTaken={() => handleTaken(item)}
       handleNotTaken={() => handleNotTaken(item)}
     />
