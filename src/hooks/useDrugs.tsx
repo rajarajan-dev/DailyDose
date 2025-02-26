@@ -15,9 +15,8 @@ const useDrugs = (filter?: { today?: boolean; search?: string }) => {
       try {
         const account = await AppwriteService.getInstance().getAccount();
         const userId = account.$id;
-        const response = await AppwriteService.getInstance().getListOfDrugs(
-          userId
-        );
+        const response =
+          await AppwriteService.getInstance().getListOfDrugsforToday(userId);
 
         let drugList: DrugDocumentWithUser[] = response.documents.map(
           (doc) => ({

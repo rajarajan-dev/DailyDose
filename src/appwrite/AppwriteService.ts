@@ -77,7 +77,7 @@ export class AppwriteService {
     );
   }
 
-  public async getListOfDrugs(userId: string) {
+  public async getListOfDrugsforToday(userId: string) {
     const startOfToday = new Date(); // Current date and time
     startOfToday.setUTCHours(0, 0, 0, 0); // Set time to 11:59:59.999 PM
     console.log("Start of today " + startOfToday.toISOString());
@@ -90,6 +90,45 @@ export class AppwriteService {
       Query.equal("user_id", userId), // Filter by user_id
       Query.lessThanEqual("startdate", endOfToday.toISOString()), // Filter by startdate <= userDate
       Query.greaterThanEqual("enddate", startOfToday.toISOString()), // Filter by endDate >= userDate
+    ]);
+  }
+
+  /*
+   const filters = {
+      drugName,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      timing,
+      status,
+      doctor,
+    };
+  */
+
+  public async getListOfDrugsbyFilters(
+    userId: string,
+    searchFilter: {
+      drugName: string;
+      startDate: string;
+      endDate: string;
+      timing: string[];
+      status: string;
+      doctor: string;
+    }
+  ) {
+    const startOfToday = new Date(); // Current date and time
+    startOfToday.setUTCHours(0, 0, 0, 0); // Set time to 11:59:59.999 PM
+    console.log("Start of today " + startOfToday.toISOString());
+
+    const endOfToday = new Date(); // Current date and time
+    endOfToday.setUTCHours(23, 59, 59, 999); // Set time to 11:59:59.999 PM
+    console.log("End of today " + endOfToday.toISOString());
+
+    return this.databases.listDocuments(this.DATABASE_ID, this.DRUG_COL_ID, [
+      Query.equal("user_id", userId), // Filter by user_id
+      Query.search("drugName", searchFilter.drugName),
+      Query.lessThanEqual("startdate", endOfToday.toISOString()), // Filter by startdate <= userDate
+      Query.greaterThanEqual("enddate", startOfToday.toISOString()), // Filter by endDate >= userDate
+      Query.contains("timing", searchFilter.timing),
     ]);
   }
 }

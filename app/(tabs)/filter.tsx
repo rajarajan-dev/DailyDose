@@ -45,7 +45,15 @@ const FilterScreen = () => {
     setStatus(selectedStatus);
   };
 
-  const ResetFilters = () => {};
+  const ResetFilters = () => {
+    // State for filter options
+    setDrugName("");
+    setStartDate(new Date());
+    setEndDate(new Date());
+    setTiming([]);
+    setStatus("");
+    setDoctor("");
+  };
 
   // Apply filters and navigate to the results screen
   const applyFilters = () => {

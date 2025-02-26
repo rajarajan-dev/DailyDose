@@ -17,7 +17,7 @@ const ManageScreen = () => {
       .getAccount()
       .then(function (response) {
         const userId = response.$id;
-        return AppwriteService.getInstance().getListOfDrugs(userId);
+        return AppwriteService.getInstance().getListOfDrugsforToday(userId);
       })
       .then((response) => {
         console.log("Success:", response);

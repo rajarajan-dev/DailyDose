@@ -7,6 +7,7 @@ export default function Index() {
   //return <Redirect href="/add-drugs" />;
   //return <Redirect href="/update-passcode" />;
 
+  /*
   const { isLogin } = React.useContext(StateContext);
 
   return !isLogin ? (
@@ -14,4 +15,6 @@ export default function Index() {
   ) : (
     <Redirect href="/(tabs)/today" />
   );
+  */
+  return <Redirect href="/filter" />;
 }
