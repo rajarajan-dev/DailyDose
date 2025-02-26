@@ -1,15 +1,29 @@
 import CustomButton from "@/src/components/ui/CustomButton";
 import PrescriptionList from "@/src/components/PrescriptionList";
 import { router } from "expo-router";
-import { View, Text, SafeAreaView } from "react-native";
-import { DrugDocumentWithUser } from "@/src/types/DrugDocument";
+import { View, Text, SafeAreaView, Alert } from "react-native";
 import useDrugs from "@/src/hooks/useDrugs";
+import { AppwriteService } from "@/src/appwrite/AppwriteService";
 
 export default function TodayScreen() {
-  const { data, loading, error } = useDrugs();
+  const { data, loading, error, refetch } = useDrugs();
 
   const handleAddDrug = () => {
     router.push("/add-drug");
+  };
+
+  const handleEditOption = (id: string) => {
+    router.push({ pathname: "/add-drug", params: { id } }); // Pass the drug ID to the AddDrugsScreen
+  };
+
+  const handleDeleteOption = async (id: string) => {
+    try {
+      await AppwriteService.getInstance().deleteDrugDocument(id);
+      refetch(); // Refresh the drug list after deletion
+    } catch (error) {
+      console.error("Error deleting drug:", error);
+      Alert.alert("Error", "Failed to delete the drug.");
+    }
   };
 
   return (
@@ -23,9 +37,8 @@ export default function TodayScreen() {
 
         <PrescriptionList
           data={data}
-          handleTaken={(item: DrugDocumentWithUser) => {}}
-          handleNotTaken={(item: DrugDocumentWithUser) => {}}
-          cardType="today"
+          handleEditOption={handleEditOption}
+          handleDeleteOption={handleDeleteOption}
         />
 
         <View className="p-2">

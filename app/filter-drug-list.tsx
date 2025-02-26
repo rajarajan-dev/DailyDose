@@ -49,9 +49,8 @@ export default function FilterDrugListScreen() {
         {error && <Text>Error: {error.message}</Text>}
         <PrescriptionList
           data={data}
-          handleTaken={(item: DrugDocumentWithUser) => {}}
+          handleEditOption={(item: DrugDocumentWithUser) => {}}
           handleNotTaken={(item: DrugDocumentWithUser) => {}}
-          cardType="today"
         />
       </View>
     </SafeAreaView>

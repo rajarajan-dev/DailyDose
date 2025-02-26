@@ -5,18 +5,17 @@ import DrugCard from "./DrugCard";
 
 interface PrescriptionListProps {
   data: DrugDocumentWithUser[] | undefined;
-  handleTaken: (item: DrugDocumentWithUser) => void;
-  handleNotTaken: (item: DrugDocumentWithUser) => void;
-  cardType: "today" | "display";
+  handleEditOption: (id: string) => void;
+  handleDeleteOption: (id: string) => void;
 }
 const PrescriptionList: React.FC<PrescriptionListProps> = ({
   data,
-  handleTaken,
-  handleNotTaken,
-  cardType,
+  handleEditOption,
+  handleDeleteOption,
 }) => {
   const renderDrugCardItem = ({ item }: { item: DrugDocumentWithUser }) => (
     <DrugCard
+      id={item.$id}
       name={item.name}
       dosage={item.dosage}
       description={item.description}
@@ -25,6 +24,8 @@ const PrescriptionList: React.FC<PrescriptionListProps> = ({
       startdate={item.startdate}
       enddate={item.enddate}
       doctor={item.doctor}
+      handleDeleteOption={handleDeleteOption}
+      handleEditOption={handleEditOption}
     />
   );
 

@@ -54,9 +54,8 @@ const ManageScreen = () => {
 
         <PrescriptionList
           data={data}
-          handleTaken={(item: DrugDocumentWithUser) => {}}
+          handleEditOption={(item: DrugDocumentWithUser) => {}}
           handleNotTaken={(item: DrugDocumentWithUser) => {}}
-          cardType="display"
         />
 
         <View className="p-2">

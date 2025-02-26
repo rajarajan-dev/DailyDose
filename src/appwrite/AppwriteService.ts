@@ -1,5 +1,9 @@
 import { Client, Account, ID, Databases, Query } from "react-native-appwrite";
-import { DrugDocument, DrugDocumentWithUser } from "../types/DrugDocument";
+import {
+  DrugDocument,
+  DrugDocumentWithUser,
+  DrugDocumentWithUserAndDocId,
+} from "../types/DrugDocument";
 
 export class AppwriteService {
   private static instance: AppwriteService;
@@ -68,6 +72,27 @@ export class AppwriteService {
     return this.account.createRecovery(email, url);
   }
 
+  public async deleteDrugDocument(id: string) {
+    return this.databases.deleteDocument(
+      this.DATABASE_ID,
+      this.DRUG_COL_ID,
+      id
+    );
+  }
+
+  public async getDrugDocumentById(id: string) {
+    return this.databases.getDocument(this.DATABASE_ID, this.DRUG_COL_ID, id);
+  }
+
+  public async updateDrugDocument(drug: DrugDocumentWithUserAndDocId) {
+    return this.databases.updateDocument(
+      this.DATABASE_ID,
+      this.DRUG_COL_ID,
+      drug.$id,
+      drug
+    );
+  }
+
   public async addDrugDocument(drug: DrugDocumentWithUser) {
     return this.databases.createDocument(
       this.DATABASE_ID,
@@ -90,17 +115,6 @@ export class AppwriteService {
       Query.greaterThanEqual("enddate", startOfToday.toISOString()), // Filter by enddate >= startOfToday
     ]);
   }
-
-  /*
-   const filters = {
-      drugName,
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
-      timing,
-      status,
-      doctor,
-    };
-  */
 
   public async getListOfDrugsbyFilters(
     userId: string,

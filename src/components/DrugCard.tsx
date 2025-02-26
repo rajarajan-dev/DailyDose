@@ -1,6 +1,7 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 interface DrugCardProps {
+  id: string;
   name: string;
   description: string;
   dosage: string;
@@ -9,9 +10,12 @@ interface DrugCardProps {
   startdate: string;
   enddate: string;
   doctor: string;
+  handleEditOption: (id: string) => void;
+  handleDeleteOption: (id: string) => void;
 }
 
 const DrugCard: React.FC<DrugCardProps> = ({
+  id,
   name,
   description,
   dosage,
@@ -20,6 +24,8 @@ const DrugCard: React.FC<DrugCardProps> = ({
   startdate,
   enddate,
   doctor,
+  handleEditOption,
+  handleDeleteOption,
 }) => {
   return (
     <View className="bg-white p-4 rounded-lg shadow m-2">
@@ -62,6 +68,22 @@ const DrugCard: React.FC<DrugCardProps> = ({
           {startdate} to {enddate}
         </Text>
       </Text>
+
+      {/* Drug Action Buttons */}
+      <View className="flex-row justify-between mt-4">
+        <TouchableOpacity
+          className="bg-red-500 px-4 py-2 rounded"
+          onPress={() => handleDeleteOption(id)}
+        >
+          <Text className="text-white font-bold">Delete</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="bg-green-500 px-4 py-2 rounded"
+          onPress={() => handleEditOption(id)}
+        >
+          <Text className="text-white font-bold">Edit</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

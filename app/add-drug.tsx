@@ -2,48 +2,91 @@ import ChipView from "@/src/components/ui/ChipView";
 import CustomButton from "@/src/components/ui/CustomButton";
 import FormField from "@/src/components/ui/FormField";
 import FormFieldMultipleLine from "@/src/components/ui/FormFieldMultipleLine";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { View, Text, ScrollView, Alert } from "react-native";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import formatDate from "@/src/helper/formatDate";
-import { DrugDocument, DrugDocumentWithUser } from "@/src/types/DrugDocument";
+import {
+  DrugDocument,
+  DrugDocumentWithUser,
+  DrugDocumentWithUserAndDocId,
+} from "@/src/types/DrugDocument";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
+import { router, useLocalSearchParams } from "expo-router";
+
 const AddDrugsScreen = () => {
+  const { id } = useLocalSearchParams(); // Get the drug ID from the route params
+  const [isEditing, setIsEditing] = useState(!!id); // Check if in edit mode
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(
     new Date(new Date().setDate(new Date().getDate() + 1))
   );
+
+  // Helper function to ensure the value is a string
+  const getStringValue = (value: string | string[] | undefined): string => {
+    if (Array.isArray(value)) {
+      return value[0] || ""; // Use the first element if it's an array
+    }
+    return value || ""; // Return the value or an empty string if undefined
+  };
 
   const [forms, setForms] = useState<DrugDocument>({
     name: "",
     description: "",
     dosage: "",
     timing: [],
-    taken: "Before Food",
-    startDate: formatDate(startDate),
-    endDate: formatDate(endDate),
+    canbetaken: "Before Food",
+    startdate: formatDate(startDate),
+    enddate: formatDate(endDate),
     doctor: "",
   });
 
   const timingsOptions = ["Breakfast", "Lunch", "Evening", "Night"];
 
+  // Fetch drug details if in edit mode
+  useEffect(() => {
+    if (isEditing && id) {
+      AppwriteService.getInstance()
+        .getDrugDocumentById(id as string)
+        .then((drug) => {
+          setForms({
+            name: drug.name,
+            description: drug.description,
+            dosage: drug.dosage,
+            timing: drug.timing,
+            canbetaken:
+              drug.canbetaken === "before" ? "Before Food" : "After Food",
+            startdate: drug.startdate,
+            enddate: drug.enddate,
+            doctor: drug.doctor,
+          });
+          setStartDate(new Date(drug.startdate));
+          setEndDate(new Date(drug.enddate));
+        })
+        .catch((error) => {
+          console.error("Error fetching drug details:", error);
+          Alert.alert("Error", "Failed to fetch drug details.");
+        });
+    }
+  }, [id, isEditing]);
+
   const onStartDateChange = (event: DateTimePickerEvent, date?: Date) => {
     if (!date) return;
     setStartDate(date);
-    setForms({ ...forms, startDate: formatDate(date) });
+    setForms({ ...forms, startdate: formatDate(date) });
   };
 
   const onEndDateChange = (event: DateTimePickerEvent, date?: Date) => {
     if (!date) return;
     setEndDate(date);
-    setForms({ ...forms, endDate: formatDate(date) });
+    setForms({ ...forms, enddate: formatDate(date) });
   };
 
   const handleTaken = useCallback((taken: string) => {
     setForms((prev) => ({ ...prev, taken }));
-  }, []); // No dependencies → function never recreates
+  }, []);
 
   const handleTiming = useCallback((timing: string) => {
     setForms((prev) => ({
@@ -61,9 +104,9 @@ const AddDrugsScreen = () => {
     if (!forms.name.trim()) errors.name = "Name is required.";
     if (forms.timing.length === 0)
       errors.timing = "At least one timing must be selected.";
-    if (!forms.taken.trim()) errors.taken = "Taken field is required.";
-    if (!forms.startDate.trim()) errors.startDate = "Start date is required.";
-    if (!forms.endDate.trim()) errors.endDate = "End date is required.";
+    if (!forms.canbetaken.trim()) errors.taken = "Taken field is required.";
+    if (!forms.startdate.trim()) errors.startDate = "Start date is required.";
+    if (!forms.enddate.trim()) errors.endDate = "End date is required.";
 
     // Date validation: endDate should be same or after startDate
     if (endDate < startDate) {
@@ -80,33 +123,40 @@ const AddDrugsScreen = () => {
       return;
     }
 
-    if (!forms) {
-      console.error("Forms data is missing!");
-      return;
-    }
-
     AppwriteService.getInstance()
       .getAccount()
-      .then(function (response) {
+      .then((response) => {
         const userId = response.$id;
-        // Combine the objects
+
         const drugDocWithUser: DrugDocumentWithUser = {
           name: forms.name,
           description: forms.description,
           dosage: forms.dosage,
           timing: forms.timing,
-          canbetaken: forms.taken === "Before Food" ? "before" : "after",
+          canbetaken: forms.canbetaken === "Before Food" ? "before" : "after",
           startdate: new Date(startDate).toISOString(),
           enddate: new Date(endDate).toISOString(),
           doctor: forms.doctor,
-          user_id: userId, // Add user_id
+          user_id: userId,
         };
 
-        return AppwriteService.getInstance().addDrugDocument(drugDocWithUser);
+        if (isEditing && id) {
+          // Update existing drug
+          return AppwriteService.getInstance().updateDrugDocument({
+            ...drugDocWithUser, // Spread the existing properties
+            $id: getStringValue(id), // Add the $id property
+          });
+        } else {
+          // Add new drug
+          return AppwriteService.getInstance().addDrugDocument(drugDocWithUser);
+        }
       })
-      .then((response) => {})
+      .then(() => {
+        router.back(); // Navigate back after successful submission
+      })
       .catch((error) => {
-        console.error("Error fetching user:", error);
+        console.error("Error:", error);
+        Alert.alert("Error", "Failed to save the drug.");
       });
   };
 
@@ -155,7 +205,7 @@ const AddDrugsScreen = () => {
             <View className="flex-row">
               <ChipView
                 label="Before Food"
-                isSelected={forms.taken === "Before Food"}
+                isSelected={forms.canbetaken === "Before Food"}
                 onPress={() => {
                   handleTaken("Before Food");
                 }}
@@ -164,7 +214,7 @@ const AddDrugsScreen = () => {
               />
               <ChipView
                 label="After Food"
-                isSelected={forms.taken === "After Food"}
+                isSelected={forms.canbetaken === "After Food"}
                 onPress={() => {
                   handleTaken("After Food");
                 }}
@@ -230,7 +280,7 @@ const AddDrugsScreen = () => {
             placeholder="Doctor"
           />
           <CustomButton
-            title="Add Drug"
+            title={isEditing ? "Update Drug" : "Add Drug"}
             handlePress={handleSubmit}
             containerStyles="my-8"
             isLoading={false}
