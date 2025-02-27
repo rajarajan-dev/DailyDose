@@ -63,7 +63,10 @@ export default function signin() {
       // Save credentials to secure storage
       await SecureStore.setItemAsync("email", email);
       await SecureStore.setItemAsync("password", password);
-      await SecureStore.setItemAsync("rememberme", rememberMe.toString());
+      await SecureStore.setItemAsync(
+        "rememberme",
+        rememberMe ? "true" : "false"
+      );
     } else {
       // Remove saved credentials
       await SecureStore.deleteItemAsync("email");
@@ -73,7 +76,10 @@ export default function signin() {
 
     setIsLoading(true);
     const sessionId = await SecureStore.getItemAsync("sessionid");
-    AppwriteService.getInstance().closeSession(sessionId || "current");
+    if (sessionId) {
+      AppwriteService.getInstance().closeSession(sessionId);
+    }
+
     const promise = AppwriteService.getInstance().createSession(
       email,
       password
@@ -170,14 +176,14 @@ export default function signin() {
 
         <TouchableOpacity
           onPress={() => {
-            setRememberMe(!rememberMe);
+            setRememberMe((prev) => !prev);
           }}
         >
           <View className="flex mt-4 flex-row justify-end">
             <Image
+              key={rememberMe ? "checked" : "unchecked"} // Force re-render
               source={rememberMe ? icons.checked : icons.unchecked}
-              height={10}
-              width={10}
+              style={{ width: 15, height: 15 }}
               resizeMode="contain"
             />
             <Text className="text-sm font-semibold text-right ml-2 mr-2 underline text-secondary-100">

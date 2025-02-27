@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/src/components/ui/FormField";
@@ -66,6 +66,15 @@ const FilterScreen = () => {
       canBeTaken,
       doctor,
     };
+
+    // Date validation: endDate should be same or after startDate
+    if (endDate < startDate) {
+      Alert.alert(
+        "Validation Error",
+        "End date cannot be before the start date."
+      );
+      return;
+    }
 
     // Navigate to the FilterScreen and pass the filters as query parameters
     router.push({
@@ -176,7 +185,7 @@ const FilterScreen = () => {
         <View className="py-6 flex-row justify-evenly">
           <CustomButton
             title="Reset"
-            containerStyles="bg-secondary py-5 rounded-lg min-h-[25px] px-5"
+            containerStyles="bg-secondary py-2 rounded-lg px-8"
             textStyles="font-pregular text-base"
             handlePress={ResetFilters}
             isLoading={false}
@@ -184,7 +193,7 @@ const FilterScreen = () => {
 
           <CustomButton
             title="Apply"
-            containerStyles="bg-secondary py-5 rounded-lg min-h-[25px] px-5"
+            containerStyles="bg-secondary py-2 rounded-lg px-8"
             textStyles="font-pregular text-base"
             handlePress={applyFilters}
             isLoading={false}

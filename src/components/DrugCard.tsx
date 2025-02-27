@@ -1,7 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import formatDate from "../helper/formatDate";
-import parseDate from "../helper/parseDate";
 interface DrugCardProps {
   id: string;
   name: string;
