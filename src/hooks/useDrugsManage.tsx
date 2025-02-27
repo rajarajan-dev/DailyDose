@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import { DrugDocumentWithUserAndDocId } from "@/src/types/DrugDocument";
 
-const useDrugsManage = () => {
+const useDrugsHistory = () => {
   const [data, setData] = useState<DrugDocumentWithUserAndDocId[]>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -48,4 +48,4 @@ const useDrugsManage = () => {
   return { data, loading, error, refetch: fetchData };
 };
 
-export default useDrugsManage;
+export default useDrugsHistory;

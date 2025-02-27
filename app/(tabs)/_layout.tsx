@@ -1,11 +1,11 @@
-import { View, Image, Text, ImageSourcePropType } from "react-native";
-import { icons } from "@/src/constants";
+import { View, Text } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface TabIconProps {
-  icon: ImageSourcePropType;
+  icon: "today" | "filter" | "file-tray-full" | "settings";
   color: string;
   name: string;
   focused: boolean;
@@ -14,12 +14,7 @@ interface TabIconProps {
 const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
   return (
     <View className="flex items-center justify-center gap-2">
-      <Image
-        source={icon}
-        resizeMode="contain"
-        tintColor={color}
-        className="w-6 h-6"
-      />
+      <Ionicons name={icon} size={24} color={color} />
       <Text
         className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
         style={{ color: color }}
@@ -61,7 +56,7 @@ export default function RootContainer() {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={icons.home}
+                icon={"today"}
                 color={color}
                 name={"Today"}
                 focused={focused}
@@ -76,7 +71,7 @@ export default function RootContainer() {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={icons.bookmark}
+                icon={"filter"}
                 color={color}
                 name="Filter"
                 focused={focused}
@@ -85,30 +80,30 @@ export default function RootContainer() {
           }}
         />
         <Tabs.Screen
-          name="manage"
+          name="history"
           options={{
-            title: "Manage",
+            title: "History",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={icons.plus}
+                icon={"file-tray-full"}
                 color={color}
-                name="Manage"
+                name="History"
                 focused={focused}
               />
             ),
           }}
         />
         <Tabs.Screen
-          name="profile"
+          name="settings"
           options={{
             title: "Profile",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={icons.profile}
+                icon={"settings"}
                 color={color}
-                name="Profile"
+                name="Settings"
                 focused={focused}
               />
             ),

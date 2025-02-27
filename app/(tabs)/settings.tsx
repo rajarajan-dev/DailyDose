@@ -6,7 +6,7 @@ import { Link, Redirect, router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 
-const ProfileScreen = () => {
+const SettingsScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -81,4 +81,4 @@ const ProfileScreen = () => {
   );
 };
 
-export default ProfileScreen;
+export default SettingsScreen;

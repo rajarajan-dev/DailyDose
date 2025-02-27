@@ -1,7 +1,7 @@
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import PrescriptionList from "@/src/components/PrescriptionList";
 import CustomButton from "@/src/components/ui/CustomButton";
-import useDrugsManage from "@/src/hooks/useDrugsManage";
+import useDrugsHistory from "@/src/hooks/useDrugsManage";
 import { router } from "expo-router";
 import {
   View,
@@ -13,8 +13,8 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 
-const ManageScreen = () => {
-  const { data, loading, error, refetch } = useDrugsManage();
+const HistoryScreen = () => {
+  const { data, loading, error, refetch } = useDrugsHistory();
 
   // Refetch data when the screen is focused
   useFocusEffect(
@@ -121,4 +121,4 @@ const ManageScreen = () => {
   );
 };
 
-export default ManageScreen;
+export default HistoryScreen;
