@@ -11,9 +11,11 @@ import * as SecureStore from "expo-secure-store";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FormField from "@/src/components/ui/FormField";
 import CustomButton from "@/src/components/ui/CustomButton";
+import ErrorMessage from "@/src/components/ui/ErrorMessage";
 import { StateContext } from "@/src/providers/StateContext";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import "../../global.css";
+import HyperlinkLabel from "@/src/components/ui/HyperlinkLabel";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -139,33 +141,24 @@ export default function SignIn() {
           keyboardType="email-address"
           placeholder="Email Id"
         />
-        {errors.email && (
-          <Text className="text-red-500 mt-2">{errors.email}</Text>
-        )}
+        {errors.email && <ErrorMessage message={errors.email} />}
 
         <FormField
           title="Password"
           value={password}
-          handleChangeText={(value) => {
-            setPassword(value);
-          }}
+          handleChangeText={setPassword}
           otherStyles="mt-8"
           keyboardType="default"
           placeholder="Password"
         />
-
-        {errors.password && (
-          <Text className="text-red-500 mt-2">{errors.password}</Text>
-        )}
+        {errors.password && <ErrorMessage message={errors.password} />}
 
         <TouchableOpacity
           onPress={() => {
             router.push("/forgot");
           }}
         >
-          <Text className="text-sm font-semibold mt-3 text-right mr-2 underline text-secondary-100">
-            Forgot Password
-          </Text>
+          <HyperlinkLabel message="Forgot Password" />
         </TouchableOpacity>
 
         <CustomButton
@@ -184,6 +177,7 @@ export default function SignIn() {
               size={18}
               color={rememberMe ? "orange" : "white"}
             />
+
             <Text className="text-sm font-semibold text-right ml-1 mr-2 underline text-secondary-100">
               Remember me
             </Text>
@@ -195,9 +189,7 @@ export default function SignIn() {
             router.push("/(auth)/sign-up");
           }}
         >
-          <Text className="text-sm font-semibold mt-7 text-right mr-2 underline text-secondary-100">
-            Don't have an account?. Register!
-          </Text>
+          <HyperlinkLabel message="Don't have an account?. Register!" />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
