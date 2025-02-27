@@ -3,22 +3,16 @@ import PrescriptionList from "@/src/components/PrescriptionList";
 import CustomButton from "@/src/components/ui/CustomButton";
 import useDrugsHistory from "@/src/hooks/useDrugsManage";
 import { router } from "expo-router";
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Alert,
-  ActivityIndicator,
-  TouchableOpacity,
-} from "react-native";
+import { View, SafeAreaView, Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
-import useSessionCleanup from "@/src/hooks/useSessionCleanup";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import ShowLoadingScreen from "@/src/components/ui/ShowLoadingScreen";
+import APIFailureMessage from "@/src/components/ui/APIFailureMessage";
+import NoDrugsFound from "@/src/components/ui/NoDrugsFound";
+import Header from "@/src/components/Header";
 
 const HistoryScreen = () => {
   const { data, loading, error, refetch } = useDrugsHistory();
-  const { clearSessionAndCredentials, isClearing } = useSessionCleanup();
 
   // Refetch data when the screen is focused
   useFocusEffect(
@@ -27,14 +21,17 @@ const HistoryScreen = () => {
     }, [refetch])
   );
 
+  // Handle "Add Drug" button press
   const handleAddDrug = () => {
     router.push("/add-drug");
   };
 
+  // Handle "Edit Drug" option
   const handleEditOption = (id: string) => {
     router.push({ pathname: "/add-drug", params: { id } }); // Pass the drug ID to the AddDrugsScreen
   };
 
+  // Handle "Delete Drug" option
   const handleDeleteOption = async (id: string) => {
     try {
       await AppwriteService.getInstance().deleteDrugDocument(id);
@@ -45,75 +42,34 @@ const HistoryScreen = () => {
     }
   };
 
-  const handleLogout = () => {
-    clearSessionAndCredentials();
-    router.push("/(auth)/sign-in");
-  };
-
   // Show loading indicator
   if (loading) {
-    return (
-      <SafeAreaView className="bg-primary flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#ffffff" />
-        <Text className="text-white mt-4">Loading drugs...</Text>
-      </SafeAreaView>
-    );
+    return <ShowLoadingScreen />;
   }
 
   // Show error message
   if (error) {
-    return (
-      <SafeAreaView className="bg-primary flex-1 justify-center items-center">
-        <Text className="text-white text-lg font-bold text-center">
-          Error: {error.message}
-        </Text>
-        <CustomButton
-          title="Retry"
-          containerStyles="bg-secondary py-3 rounded-lg min-h-[34px] mt-4"
-          textStyles="font-pregular text-base"
-          handlePress={refetch}
-          isLoading={false}
-        />
-      </SafeAreaView>
-    );
+    return <APIFailureMessage message={error.message} handlePress={refetch} />;
   }
 
   // Show empty state message if no drugs are available
   if (!data || data.length === 0) {
     return (
-      <SafeAreaView className="bg-primary flex-1 justify-center items-center">
-        <Text className="text-white text-lg font-bold text-center">
-          No drugs found.
-        </Text>
-        <Text className="text-white text-center mt-2">
-          Start by adding a new drug to your list.
-        </Text>
-        <CustomButton
-          title="Add Drug"
-          containerStyles="bg-secondary py-3 rounded-lg min-h-[34px] mt-4"
-          textStyles="font-pregular text-base"
-          handlePress={handleAddDrug}
-          isLoading={false}
-        />
-      </SafeAreaView>
+      <NoDrugsFound
+        title="No drugs found."
+        subTitle="Start by adding a new drug to your list."
+        handlePress={handleAddDrug}
+      />
     );
   }
 
   return (
     <SafeAreaView className="bg-primary flex-1">
       <View className="flex-1">
-        <View className="relative items-center p-4">
-          <Text className="text-white text-lg font-bold text-center font-psemibold ">
-            History{data ? " - (" + data.length.toString() + ")" : ""}
-          </Text>
-          {/* Logout Icon (Aligned to the Right) */}
-          <TouchableOpacity
-            onPress={handleLogout}
-            className="absolute right-4 top-4"
-          >
-            <Ionicons name="log-out-outline" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
+        {/* Header */}
+        <Header
+          title={`History${data ? " - (" + data.length.toString() + ")" : ""}`}
+        />
 
         {/* Display the list of drugs */}
         <PrescriptionList
@@ -123,15 +79,13 @@ const HistoryScreen = () => {
         />
 
         {/* Add Drug Button */}
-        <View className="p-2">
-          <CustomButton
-            title="Add Drug"
-            containerStyles="bg-secondary py-3 rounded-lg min-h-[34px]"
-            textStyles="font-pregular text-base"
-            handlePress={handleAddDrug}
-            isLoading={false}
-          />
-        </View>
+        <CustomButton
+          title="Add Drug"
+          containerStyles="bg-secondary p-2 py-3 rounded-lg min-h-[34px]"
+          textStyles="font-pregular text-base"
+          handlePress={handleAddDrug}
+          isLoading={false}
+        />
       </View>
     </SafeAreaView>
   );
