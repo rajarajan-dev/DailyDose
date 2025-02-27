@@ -168,13 +168,13 @@ const DrugCard: React.FC<DrugCardProps> = ({
       {/* Drug Action Buttons */}
       <View className="flex-row justify-between mt-4">
         <TouchableOpacity
-          className="bg-red-500 px-4 py-2 rounded"
+          className="bg-red-500 px-6 py-2 rounded"
           onPress={() => handleDeleteOption(id)}
         >
           <Text className="text-white font-bold">Delete</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="bg-green-500 px-4 py-2 rounded"
+          className="bg-green-500 px-10 py-2 rounded"
           onPress={() => handleEditOption(id)}
         >
           <Text className="text-white font-bold">Edit</Text>
