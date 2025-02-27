@@ -70,12 +70,7 @@ export class AppwriteService {
   }
 
   public async getAccount() {
-    try {
-      return await this.account.get();
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
+    return await this.account.get();
   }
 
   public async closeSession(sessionId: string) {
