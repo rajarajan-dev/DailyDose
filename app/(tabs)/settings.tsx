@@ -63,13 +63,13 @@ const SettingsScreen = () => {
       </View>
 
       <View className="p-2">
-        <Text className="text-2xl text-white">User Name:</Text>
-        <Text className="text-white text-xl ml-4">{name}</Text>
+        <Text className="text-xl text-gray-400">User Name :</Text>
+        <Text className="text-gray-200 text-xl ml-4">{name}</Text>
 
-        <Text className="text-2xl text-white">Email:</Text>
-        <Text className="text-white text-xl ml-4">{email}</Text>
+        <Text className="text-xl text-gray-400 mt-2">Email :</Text>
+        <Text className="text-gray-200 text-xl ml-4">{email}</Text>
       </View>
-      <View className="bg-gray-300 h-0.5 w-full my-2"></View>
+      <View className="bg-gray-500 h-0.5 w-full my-2"></View>
 
       <Link href="/update-passcode">
         <View className="p-4">

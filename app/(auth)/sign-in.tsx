@@ -3,7 +3,6 @@ import {
   Text,
   SafeAreaView,
   Dimensions,
-  Image,
   TouchableOpacity,
   StyleSheet,
   Alert,
@@ -13,7 +12,6 @@ import FormField from "@/src/components/ui/FormField";
 import CustomButton from "@/src/components/ui/CustomButton";
 import "../../global.css";
 import { router } from "expo-router";
-import { icons } from "@/src/constants";
 import React from "react";
 import { StateContext } from "@/src/providers/StateContext";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
