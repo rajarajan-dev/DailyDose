@@ -25,8 +25,6 @@ const AddDrugsScreen = () => {
     new Date(new Date().setDate(new Date().getDate() + 1))
   );
 
- 
-
   const [forms, setForms] = useState<DrugDocument>({
     name: "",
     description: "",
@@ -51,8 +49,7 @@ const AddDrugsScreen = () => {
             description: drug.description,
             dosage: drug.dosage,
             timing: drug.timing,
-            canbetaken:
-              drug.canbetaken === "before" ? "Before Food" : "After Food",
+            canbetaken: drug.canbetaken === "Before Food" ? "before" : "after",
             startdate: drug.startdate,
             enddate: drug.enddate,
             doctor: drug.doctor,
@@ -79,8 +76,8 @@ const AddDrugsScreen = () => {
     setForms({ ...forms, enddate: formatDate(date) });
   };
 
-  const handleTaken = useCallback((taken: string) => {
-    setForms((prev) => ({ ...prev, taken }));
+  const handleTaken = useCallback((canbetaken: string) => {
+    setForms((prev) => ({ ...prev, canbetaken }));
   }, []);
 
   const handleTiming = useCallback((timing: string) => {
