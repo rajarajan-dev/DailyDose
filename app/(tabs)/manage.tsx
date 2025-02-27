@@ -95,7 +95,7 @@ const ManageScreen = () => {
       <View className="flex-1">
         <View className="p-4 font-psemibold">
           <Text className="text-white text-lg font-bold text-center">
-            Manage
+            Manage{data ? " - (" + data.length.toString() + ")" : ""}
           </Text>
         </View>
 

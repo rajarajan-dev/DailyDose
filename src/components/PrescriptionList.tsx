@@ -24,8 +24,8 @@ const PrescriptionList: React.FC<PrescriptionListProps> = ({
       name={item.name}
       dosage={item.dosage}
       description={item.description}
-      timing={item.timing.join(",")}
-      canBeTaken={item.canbetaken}
+      timing={item.timing.join(", ")}
+      canBeTaken={item.canbetaken === "before" ? "Before Food" : "After Food"}
       startdate={formatDate(new Date(item.startdate))}
       enddate={formatDate(new Date(item.enddate))}
       doctor={item.doctor}

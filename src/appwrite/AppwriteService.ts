@@ -208,6 +208,7 @@ export class AppwriteService {
           Query.equal("user_id", userId),
           Query.lessThanEqual("startdate", endOfToday.toISOString()),
           Query.greaterThanEqual("enddate", startOfToday.toISOString()),
+          Query.orderDesc("$updatedAt"),
         ]
       );
     } catch (error) {
@@ -223,7 +224,7 @@ export class AppwriteService {
       startDate?: string;
       endDate?: string;
       timing?: string[];
-      status?: string;
+      canBeTaken?: string;
       doctor?: string;
     }
   ) {
@@ -253,9 +254,8 @@ export class AppwriteService {
         queries.push(Query.contains("timing", searchFilter.timing));
       }
 
-      if (searchFilter.status) {
-        const isTaken = searchFilter.status === "taken";
-        queries.push(Query.equal("taken", isTaken));
+      if (searchFilter.canBeTaken) {
+        queries.push(Query.equal("canbetaken", searchFilter.canBeTaken));
       }
 
       if (searchFilter.doctor) {

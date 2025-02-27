@@ -15,7 +15,7 @@ const FilterScreen = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [timing, setTiming] = useState<string[]>([]);
-  const [status, setStatus] = useState<"taken" | "not-taken" | "">("");
+  const [canBeTaken, setCanBeTaken] = useState<"before" | "after" | "">("");
   const [doctor, setDoctor] = useState("");
 
   // Handle date picker changes
@@ -42,8 +42,8 @@ const FilterScreen = () => {
   };
 
   // Handle status selection
-  const handleStatusSelection = (selectedStatus: "taken" | "not-taken") => {
-    setStatus(selectedStatus);
+  const handleCanBeTakenSelectd = (selectedCanBeTaken: "before" | "after") => {
+    setCanBeTaken(selectedCanBeTaken);
   };
 
   const ResetFilters = () => {
@@ -52,7 +52,7 @@ const FilterScreen = () => {
     setStartDate(new Date());
     setEndDate(new Date());
     setTiming([]);
-    setStatus("");
+    setCanBeTaken("");
     setDoctor("");
   };
 
@@ -63,10 +63,9 @@ const FilterScreen = () => {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
       timing: JSON.stringify(timing), // Convert array to string for query params
-      status,
+      canBeTaken,
       doctor,
     };
-
 
     // Navigate to the FilterScreen and pass the filters as query parameters
     router.push({
@@ -139,19 +138,21 @@ const FilterScreen = () => {
 
         {/* Status Filter */}
         <View className="mt-4">
-          <Text className="text-base text-gray-100 font-pmedium">Status</Text>
+          <Text className="text-base text-gray-100 font-pmedium">
+            Should Be Taken
+          </Text>
           <View className="flex-row">
             <ChipView
-              label="Taken"
-              isSelected={status === "taken"}
-              onPress={() => handleStatusSelection("taken")}
+              label="Before Food"
+              isSelected={canBeTaken === "before"}
+              onPress={() => handleCanBeTakenSelectd("before")}
               layoutStyle="ml-2"
               textStyle=""
             />
             <ChipView
-              label="Not Taken"
-              isSelected={status === "not-taken"}
-              onPress={() => handleStatusSelection("not-taken")}
+              label="After Food"
+              isSelected={canBeTaken === "after"}
+              onPress={() => handleCanBeTakenSelectd("after")}
               layoutStyle="ml-2"
               textStyle=""
             />

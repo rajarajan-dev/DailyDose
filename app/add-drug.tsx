@@ -8,13 +8,9 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import formatDate from "@/src/helper/formatDate";
-import {
-  DrugDocument,
-  DrugDocumentWithUser,
-  DrugDocumentWithUserAndDocId,
-} from "@/src/types/DrugDocument";
+import { DrugDocument, DrugDocumentWithUser } from "@/src/types/DrugDocument";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { getStringValue } from "@/src/helper/getStringValue";
 
 const AddDrugsScreen = () => {
@@ -24,6 +20,7 @@ const AddDrugsScreen = () => {
   const [endDate, setEndDate] = useState(
     new Date(new Date().setDate(new Date().getDate() + 1))
   );
+  const [isloading, setIsLoading] = useState(false);
 
   const [forms, setForms] = useState<DrugDocument>({
     name: "",
@@ -49,7 +46,8 @@ const AddDrugsScreen = () => {
             description: drug.description,
             dosage: drug.dosage,
             timing: drug.timing,
-            canbetaken: drug.canbetaken === "Before Food" ? "before" : "after",
+            canbetaken:
+              drug.canbetaken === "before" ? "Before Food" : "After Food",
             startdate: drug.startdate,
             enddate: drug.enddate,
             doctor: drug.doctor,
@@ -115,11 +113,12 @@ const AddDrugsScreen = () => {
       return;
     }
 
+    setIsLoading(true);
+
     AppwriteService.getInstance()
       .getAccount()
       .then((response) => {
         const userId = response.$id;
-
         const drugDocWithUser: DrugDocumentWithUser = {
           name: forms.name,
           description: forms.description,
@@ -149,13 +148,20 @@ const AddDrugsScreen = () => {
       .catch((error) => {
         console.error("Error:", error);
         Alert.alert("Error", "Failed to save the drug.");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
+
+  const headerTitle = isEditing ? "Update Drug" : "Add Drug";
 
   return (
     <View className="flex-1 bg-primary">
       <ScrollView>
         <View className="p-4">
+          <Stack.Screen options={{ headerTitle: headerTitle }} />
+
           <FormField
             title="Drug Name"
             value={forms.name}
@@ -275,7 +281,7 @@ const AddDrugsScreen = () => {
             title={isEditing ? "Update Drug" : "Add Drug"}
             handlePress={handleSubmit}
             containerStyles="my-8"
-            isLoading={false}
+            isLoading={isloading}
           />
         </View>
       </ScrollView>

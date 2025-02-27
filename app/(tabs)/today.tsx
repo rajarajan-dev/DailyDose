@@ -81,10 +81,10 @@ export default function TodayScreen() {
         </Text>
         <CustomButton
           title="Add Drug"
-          containerStyles="bg-secondary py-3 rounded-lg min-h-[34px] mt-4"
+          containerStyles="bg-secondary py-1 px-5 rounded-lg mt-4"
           textStyles="font-pregular text-base"
           handlePress={handleAddDrug}
-          isLoading={false}
+          isLoading={loading}
         />
       </SafeAreaView>
     );
@@ -95,7 +95,7 @@ export default function TodayScreen() {
       <View className="flex-1">
         <View className="p-4 font-psemibold">
           <Text className="text-white text-lg font-bold text-center">
-            Today
+            Today{data ? " - (" + data.length.toString() + ")" : ""}
           </Text>
         </View>
 
