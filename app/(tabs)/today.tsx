@@ -7,14 +7,18 @@ import {
   SafeAreaView,
   Alert,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import useDrugs from "@/src/hooks/useDrugs";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import useSessionCleanup from "@/src/hooks/useSessionCleanup";
 
 export default function TodayScreen() {
   const { data, loading, error, refetch } = useDrugs();
+  const { clearSessionAndCredentials, isClearing } = useSessionCleanup();
 
   // Refetch data when the screen is focused
   useFocusEffect(
@@ -39,6 +43,11 @@ export default function TodayScreen() {
       console.error("Error deleting drug:", error);
       Alert.alert("Error", "Failed to delete the drug.");
     }
+  };
+
+  const handleLogout = () => {
+    clearSessionAndCredentials();
+    router.push("/(auth)/sign-in");
   };
 
   // Show loading indicator
@@ -93,10 +102,17 @@ export default function TodayScreen() {
   return (
     <SafeAreaView className="bg-primary flex-1">
       <View className="flex-1">
-        <View className="p-4 font-psemibold">
-          <Text className="text-white text-lg font-bold text-center">
+        <View className="relative items-center p-4">
+          <Text className="text-white text-lg font-bold text-center font-psemibold ">
             Today{data ? " - (" + data.length.toString() + ")" : ""}
           </Text>
+          {/* Logout Icon (Aligned to the Right) */}
+          <TouchableOpacity
+            onPress={handleLogout}
+            className="absolute right-4 top-4"
+          >
+            <Ionicons name="log-out-outline" size={24} color="white" />
+          </TouchableOpacity>
         </View>
 
         {/* Display the list of drugs */}

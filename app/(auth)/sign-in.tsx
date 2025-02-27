@@ -18,6 +18,7 @@ import React from "react";
 import { StateContext } from "@/src/providers/StateContext";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import * as SecureStore from "expo-secure-store";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function signin() {
   const [email, setEmail] = useState("");
@@ -180,13 +181,14 @@ export default function signin() {
           }}
         >
           <View className="flex mt-4 flex-row justify-end">
-            <Image
-              key={rememberMe ? "checked" : "unchecked"} // Force re-render
-              source={rememberMe ? icons.checked : icons.unchecked}
-              style={{ width: 15, height: 15 }}
-              resizeMode="contain"
+            <Ionicons
+              name={
+                rememberMe ? "checkmark-circle" : "checkmark-circle-outline"
+              }
+              size={18}
+              color={rememberMe ? "orange" : "white"}
             />
-            <Text className="text-sm font-semibold text-right ml-2 mr-2 underline text-secondary-100">
+            <Text className="text-sm font-semibold text-right ml-1 mr-2 underline text-secondary-100">
               Remember me
             </Text>
           </View>

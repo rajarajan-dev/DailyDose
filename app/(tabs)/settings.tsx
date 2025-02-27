@@ -2,6 +2,7 @@ import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import SupportUs from "@/src/components/ui/SupportUs";
 import useSessionCleanup from "@/src/hooks/useSessionCleanup";
 import { StateContext } from "@/src/providers/StateContext";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link, Redirect, router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
@@ -48,10 +49,17 @@ const SettingsScreen = () => {
 
   return (
     <SafeAreaView className="bg-primary h-full">
-      <View className="font-psemibold">
-        <Text className="text-white text-lg font-bold text-center">
-          Profile
+      <View className="relative items-center p-4">
+        <Text className="text-white text-lg font-bold text-center font-psemibold ">
+          Settings
         </Text>
+        {/* Logout Icon (Aligned to the Right) */}
+        <TouchableOpacity
+          onPress={handleLogout}
+          className="absolute right-4 top-4"
+        >
+          <Ionicons name="log-out-outline" size={24} color="white" />
+        </TouchableOpacity>
       </View>
 
       <View className="p-2">
