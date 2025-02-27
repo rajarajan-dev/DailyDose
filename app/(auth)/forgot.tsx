@@ -13,7 +13,7 @@ import { router } from "expo-router";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import HyperlinkLabel from "@/src/components/ui/HyperlinkLabel";
 
-const forgot = () => {
+const Forgot = () => {
   const [email, setEmail] = useState("");
 
   const handleResetPassword = async () => {
@@ -95,4 +95,4 @@ const forgot = () => {
   );
 };
 
-export default forgot;
+export default Forgot;

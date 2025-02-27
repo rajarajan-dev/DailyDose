@@ -4,13 +4,15 @@ import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+// Define the props for the TabIcon component
 interface TabIconProps {
-  icon: "today" | "filter" | "file-tray-full" | "settings";
+  icon: keyof typeof Ionicons.glyphMap; // Allow any Ionicons icon name
   color: string;
   name: string;
   focused: boolean;
 }
 
+// Reusable TabIcon component
 const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
   return (
     <View className="flex items-center justify-center gap-2">
@@ -23,6 +25,27 @@ const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
       </Text>
     </View>
   );
+};
+
+// Define tab bar options
+const tabBarOptions = {
+  activeTintColor: "#FFA001",
+  inactiveTintColor: "#CDCDE0",
+  showLabel: false,
+  style: {
+    backgroundColor: "#161622",
+    borderTopWidth: 1,
+    borderTopColor: "#232533",
+    height: 70,
+    paddingBottom: 10,
+    paddingTop: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  iconStyle: {
+    width: "100%",
+    height: "100%",
+  },
 };
 
 export default function RootContainer() {
@@ -97,7 +120,7 @@ export default function RootContainer() {
         <Tabs.Screen
           name="settings"
           options={{
-            title: "Profile",
+            title: "Settings",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
