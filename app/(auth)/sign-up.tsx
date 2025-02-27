@@ -1,18 +1,12 @@
-import {
-  View,
-  SafeAreaView,
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-} from "react-native";
 import { useState } from "react";
+import { View, SafeAreaView, ScrollView, Text, Alert } from "react-native";
+import { router } from "expo-router";
 import FormField from "@/src/components/ui/FormField";
 import CustomButton from "@/src/components/ui/CustomButton";
-import { router } from "expo-router";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
+import ErrorMessage from "@/src/components/ui/ErrorMessage";
 
-export default function signup() {
+export default function SignUp() {
   const [forms, setForms] = useState({
     username: "",
     passcode: "",
@@ -29,6 +23,7 @@ export default function signup() {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  // Validate form inputs
   const validateInputs = () => {
     let errors: {
       email?: string;
@@ -36,19 +31,30 @@ export default function signup() {
       confirmPassword?: string;
       username?: string;
     } = {};
-    if (!forms.username || !forms.email || !forms.passcode) {
+
+    if (!forms.username) {
       errors.username = "User Name is required";
+    }
+
+    if (!forms.email) {
       errors.email = "Email is required";
-      errors.password = "Password is required";
-      errors.confirmPassword = "Confirm Password is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(forms.email)) {
       errors.email = "Invalid email format";
+    }
+
+    if (!forms.passcode) {
+      errors.password = "Password is required";
+    }
+
+    if (!forms.confirmPasscode) {
+      errors.confirmPassword = "Confirm Password is required";
     } else if (forms.passcode !== forms.confirmPasscode) {
-      errors.confirmPassword = "Password and Confirm Password should be same";
+      errors.confirmPassword = "Password and Confirm Password must match";
     }
     return errors;
   };
 
+  // Handle sign-up
   const handleSignUp = () => {
     const validationErrors = validateInputs();
     setErrors(validationErrors);
@@ -56,6 +62,7 @@ export default function signup() {
       return;
     }
 
+    // Create Account
     setIsLoading(true);
     const promise = AppwriteService.getInstance().createAccount(
       forms.email,
@@ -68,6 +75,7 @@ export default function signup() {
           router.push("/(auth)/sign-in");
         },
         function (error) {
+          Alert.alert("Sign Up", error.message);
           console.error(error);
         }
       )
@@ -79,12 +87,7 @@ export default function signup() {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
-        <View
-          className="px-4"
-          style={{
-            marginTop: Dimensions.get("screen").height * 0.05,
-          }}
-        >
+        <View className="px-4 mt-[5%]">
           <FormField
             title="User Name"
             value={forms.username}
@@ -98,9 +101,7 @@ export default function signup() {
             keyboardType="default"
             placeholder="User Name"
           />
-          {errors.username && (
-            <Text style={styles.error}>{errors.username}</Text>
-          )}
+          {errors.username && <ErrorMessage message={errors.username} />}
 
           <FormField
             title="Email Id"
@@ -115,8 +116,7 @@ export default function signup() {
             keyboardType="email-address"
             placeholder="Email Id"
           />
-
-          {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+          {errors.email && <ErrorMessage message={errors.email} />}
 
           <FormField
             title="Password"
@@ -131,9 +131,7 @@ export default function signup() {
             keyboardType="default"
             placeholder="Password"
           />
-          {errors.password && (
-            <Text style={styles.error}>{errors.password}</Text>
-          )}
+          {errors.password && <ErrorMessage message={errors.password} />}
 
           <FormField
             title="Confirm Password"
@@ -149,7 +147,7 @@ export default function signup() {
             placeholder="Confirm Password"
           />
           {errors.confirmPassword && (
-            <Text style={styles.error}>{errors.confirmPassword}</Text>
+            <ErrorMessage message={errors.confirmPassword} />
           )}
 
           <CustomButton
@@ -163,10 +161,3 @@ export default function signup() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  error: {
-    color: "red",
-    marginTop: 5,
-  },
-});
