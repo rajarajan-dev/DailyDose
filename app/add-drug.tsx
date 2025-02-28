@@ -3,7 +3,14 @@ import CustomButton from "@/src/components/ui/CustomButton";
 import FormField from "@/src/components/ui/FormField";
 import FormFieldMultipleLine from "@/src/components/ui/FormFieldMultipleLine";
 import { useCallback, useEffect, useState } from "react";
-import { View, Text, ScrollView, Alert } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Alert,
+  Platform,
+  TouchableOpacity,
+} from "react-native";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -32,6 +39,10 @@ const AddDrugsScreen = () => {
     enddate: formatDate(endDate),
     doctor: "",
   });
+
+  // State for date picker visibility (Android only)
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
   const timingsOptions = ["Breakfast", "Lunch", "Evening", "Night"];
 
@@ -63,13 +74,23 @@ const AddDrugsScreen = () => {
   }, [id, isEditing]);
 
   const onStartDateChange = (event: DateTimePickerEvent, date?: Date) => {
+    if (Platform.OS === "android") {
+      setShowStartDatePicker(false); // Hide the picker after selection (Android)
+    }
+
     if (!date) return;
+
     setStartDate(date);
     setForms({ ...forms, startdate: formatDate(date) });
   };
 
   const onEndDateChange = (event: DateTimePickerEvent, date?: Date) => {
+    if (Platform.OS === "android") {
+      setShowEndDatePicker(false); // Hide the picker after selection (Android)
+    }
+
     if (!date) return;
+
     setEndDate(date);
     setForms({ ...forms, enddate: formatDate(date) });
   };
@@ -244,13 +265,24 @@ const AddDrugsScreen = () => {
               Start Date
               <Text className="text-red text-base">*</Text>
             </Text>
-            <DateTimePicker
-              value={startDate}
-              mode="date"
-              is24Hour={false}
-              onChange={onStartDateChange}
-              themeVariant="dark"
-            />
+            {/* Start Date */}
+            {Platform.OS === "android" ? (
+              <TouchableOpacity onPress={() => setShowStartDatePicker(true)}>
+                <View className="rounded-2xl border-2 border-black-200 p-3 bg-gray-400 ">
+                  <Text className="text-white">
+                    {startDate.toLocaleDateString()}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <DateTimePicker
+                value={startDate}
+                mode="date"
+                display="default"
+                themeVariant="dark"
+                onChange={onStartDateChange}
+              />
+            )}
           </View>
 
           <View className={`space-y-0 mt-4`}>
@@ -258,14 +290,49 @@ const AddDrugsScreen = () => {
               End Date
               <Text className="text-red text-base">*</Text>
             </Text>
-            <DateTimePicker
-              value={endDate}
-              mode="date"
-              is24Hour={false}
-              onChange={onEndDateChange}
-              themeVariant="dark"
-            />
+            {/* End Date */}
+            {Platform.OS === "android" ? (
+              <TouchableOpacity onPress={() => setShowEndDatePicker(true)}>
+                <View className="rounded-2xl border-2 border-black-200 p-3 bg-gray-400 ">
+                  <Text className="text-white">
+                    {endDate.toLocaleDateString()}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <DateTimePicker
+                value={endDate}
+                mode="date"
+                display="default"
+                themeVariant="dark"
+                onChange={onEndDateChange}
+              />
+            )}
           </View>
+
+          {/* Android Date Pickers */}
+          {Platform.OS === "android" && (
+            <>
+              {showStartDatePicker && (
+                <DateTimePicker
+                  value={startDate}
+                  mode="date"
+                  display="default"
+                  themeVariant="dark"
+                  onChange={onStartDateChange}
+                />
+              )}
+              {showEndDatePicker && (
+                <DateTimePicker
+                  value={endDate}
+                  mode="date"
+                  display="default"
+                  themeVariant="dark"
+                  onChange={onEndDateChange}
+                />
+              )}
+            </>
+          )}
 
           <FormField
             title="Doctor"

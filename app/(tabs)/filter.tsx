@@ -30,14 +30,24 @@ const FilterScreen = () => {
   const [canBeTaken, setCanBeTaken] = useState<"before" | "after" | "">("");
   const [doctor, setDoctor] = useState("");
 
+  // State for date picker visibility (Android only)
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
   // Handle date picker changes
   const onStartDateChange = (event: any, selectedDate?: Date) => {
+    if (Platform.OS === "android") {
+      setShowStartDatePicker(false); // Hide the picker after selection (Android)
+    }
     if (selectedDate) {
       setStartDate(selectedDate);
     }
   };
 
   const onEndDateChange = (event: any, selectedDate?: Date) => {
+    if (Platform.OS === "android") {
+      setShowEndDatePicker(false); // Hide the picker after selection (Android)
+    }
     if (selectedDate) {
       setEndDate(selectedDate);
     }
@@ -140,22 +150,68 @@ const FilterScreen = () => {
             Date Range
           </Text>
           <View className="flex-row justify-between">
-            <DateTimePicker
-              value={startDate}
-              mode="date"
-              display="default"
-              themeVariant="dark"
-              onChange={onStartDateChange}
-            />
+            {/* Start Date */}
+            {Platform.OS === "android" ? (
+              <TouchableOpacity onPress={() => setShowStartDatePicker(true)}>
+                <View className="rounded-2xl border-2 border-black-200 p-3 bg-gray-400 ">
+                  <Text className="text-white">
+                    {startDate.toLocaleDateString()}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <DateTimePicker
+                value={startDate}
+                mode="date"
+                display="default"
+                themeVariant="dark"
+                onChange={onStartDateChange}
+              />
+            )}
 
-            <DateTimePicker
-              value={endDate}
-              mode="date"
-              display="default"
-              themeVariant="dark"
-              onChange={onEndDateChange}
-            />
+            {/* End Date */}
+            {Platform.OS === "android" ? (
+              <TouchableOpacity onPress={() => setShowEndDatePicker(true)}>
+                <View className="rounded-2xl border-2 border-black-200 p-3 bg-gray-400 ">
+                  <Text className="text-white">
+                    {endDate.toLocaleDateString()}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <DateTimePicker
+                value={endDate}
+                mode="date"
+                display="default"
+                themeVariant="dark"
+                onChange={onEndDateChange}
+              />
+            )}
           </View>
+
+          {/* Android Date Pickers */}
+          {Platform.OS === "android" && (
+            <>
+              {showStartDatePicker && (
+                <DateTimePicker
+                  value={startDate}
+                  mode="date"
+                  display="default"
+                  themeVariant="dark"
+                  onChange={onStartDateChange}
+                />
+              )}
+              {showEndDatePicker && (
+                <DateTimePicker
+                  value={endDate}
+                  mode="date"
+                  display="default"
+                  themeVariant="dark"
+                  onChange={onEndDateChange}
+                />
+              )}
+            </>
+          )}
         </View>
 
         {/* Timing Filter */}

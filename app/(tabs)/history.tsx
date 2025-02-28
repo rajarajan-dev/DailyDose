@@ -86,7 +86,7 @@ const HistoryScreen = () => {
         {/* Add Drug Button */}
         <CustomButton
           title="Add Drug"
-          containerStyles="bg-secondary p-2 py-3 rounded-lg min-h-[34px]"
+          containerStyles="bg-secondary p-2 py-3 rounded-lg min-h-[34px] m-6"
           textStyles="font-pregular text-base"
           handlePress={handleAddDrug}
           isLoading={false}
