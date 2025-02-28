@@ -91,7 +91,7 @@ export default function SignIn() {
           // Save credentials if "Remember Me" is enabled
           rememberMe ? saveToStorage() : clearStorage();
 
-          router.push("/(tabs)/today");
+          router.replace("/(tabs)/today");
         },
         function (error) {
           Alert.alert("Sign In", error.message);

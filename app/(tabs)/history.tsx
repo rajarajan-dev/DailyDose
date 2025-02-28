@@ -3,7 +3,7 @@ import PrescriptionList from "@/src/components/PrescriptionList";
 import CustomButton from "@/src/components/ui/CustomButton";
 import useDrugsHistory from "@/src/hooks/useDrugsManage";
 import { router } from "expo-router";
-import { View, SafeAreaView, Alert } from "react-native";
+import { View, SafeAreaView, Alert, Platform, StatusBar } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import ShowLoadingScreen from "@/src/components/ui/ShowLoadingScreen";
@@ -64,7 +64,12 @@ const HistoryScreen = () => {
   }
 
   return (
-    <SafeAreaView className="bg-primary flex-1">
+    <SafeAreaView
+      className="bg-primary flex-1"
+      style={{
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+      }}
+    >
       <View className="flex-1">
         {/* Header */}
         <Header

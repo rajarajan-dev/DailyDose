@@ -50,10 +50,10 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
-          name="update-passcode"
+          name="update-password"
           options={{
             headerShown: true,
-            title: "Change Passcode",
+            title: "Change Password",
             headerBackTitle: "Back",
           }}
         />

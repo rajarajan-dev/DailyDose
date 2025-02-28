@@ -5,7 +5,7 @@ import FormField from "@/src/components/ui/FormField";
 import { useState } from "react";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 
-const UpdatePasscode = () => {
+const UpdatePassword = () => {
   const [forms, setForms] = useState({
     currentPassword: "",
     password: "",
@@ -36,7 +36,7 @@ const UpdatePasscode = () => {
     return errors;
   };
 
-  const handleUpdatePasscode = () => {
+  const handleUpdatePassword = () => {
     const validationErrors = validateInputs();
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length !== 0) {
@@ -118,8 +118,8 @@ const UpdatePasscode = () => {
           )}
 
           <CustomButton
-            title="Change Passcode"
-            handlePress={handleUpdatePasscode}
+            title="Change Password"
+            handlePress={handleUpdatePassword}
             containerStyles="mt-7"
             isLoading={isLoading}
           />
@@ -129,7 +129,7 @@ const UpdatePasscode = () => {
   );
 };
 
-export default UpdatePasscode;
+export default UpdatePassword;
 
 const styles = StyleSheet.create({
   error: {

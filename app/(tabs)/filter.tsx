@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { View, Text, ScrollView, Alert, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Alert,
+  TouchableOpacity,
+  Platform,
+  StatusBar,
+} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/src/components/ui/FormField";
@@ -93,7 +101,12 @@ const FilterScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-primary">
+    <SafeAreaView
+      className="flex-1 bg-primary"
+      style={{
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+      }}
+    >
       <ScrollView className="p-4 ">
         <View className="relative items-center p-4">
           <Text className="text-white text-lg font-bold text-center font-psemibold ">

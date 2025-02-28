@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
       <TouchableOpacity
         onPress={() => {
           clearSessionAndCredentials();
-          router.push("/(auth)/sign-in");
+          router.replace("/(auth)/sign-in");
         }}
         className="absolute right-4 top-4"
       >
