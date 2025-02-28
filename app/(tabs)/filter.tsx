@@ -14,12 +14,9 @@ import FormField from "@/src/components/ui/FormField";
 import ChipView from "@/src/components/ui/ChipView";
 import CustomButton from "@/src/components/ui/CustomButton";
 import { router } from "expo-router";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import useSessionCleanup from "@/src/hooks/useSessionCleanup";
+import Header from "@/src/components/Header";
 
 const FilterScreen = () => {
-  const { clearSessionAndCredentials, isClearing } = useSessionCleanup();
-
   const timingsOptions = ["Breakfast", "Lunch", "Evening", "Night"];
 
   // State for filter options
@@ -105,11 +102,6 @@ const FilterScreen = () => {
     });
   };
 
-  const handleLogout = () => {
-    clearSessionAndCredentials();
-    router.push("/(auth)/sign-in");
-  };
-
   return (
     <SafeAreaView
       className="flex-1 bg-primary"
@@ -117,20 +109,9 @@ const FilterScreen = () => {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       }}
     >
-      <ScrollView className="p-4 ">
-        <View className="relative items-center p-4">
-          <Text className="text-white text-lg font-bold text-center font-psemibold ">
-            Filter
-          </Text>
-          {/* Logout Icon (Aligned to the Right) */}
-          <TouchableOpacity
-            onPress={handleLogout}
-            className="absolute right-4 top-4"
-          >
-            <Ionicons name="log-out-outline" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-
+      {/* Header Title*/}
+      <Header title="Filter" />
+      <ScrollView className="px-4">
         {/* Drug Name Filter */}
         <FormField
           title="Drug Name"

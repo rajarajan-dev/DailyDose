@@ -347,7 +347,7 @@ const AddDrugsScreen = () => {
           <CustomButton
             title={isEditing ? "Update Drug" : "Add Drug"}
             handlePress={handleSubmit}
-            containerStyles="my-8"
+            containerStyles="my-8 mx-8"
             isLoading={isloading}
           />
         </View>

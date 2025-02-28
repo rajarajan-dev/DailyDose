@@ -1,21 +1,22 @@
-import { View, Text, SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { View, SafeAreaView, ScrollView, Alert } from "react-native";
 import CustomButton from "@/src/components/ui/CustomButton";
 import { router } from "expo-router";
 import FormField from "@/src/components/ui/FormField";
 import { useState } from "react";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
+import ErrorMessage from "@/src/components/ui/ErrorMessage";
 
 const UpdatePassword = () => {
   const [forms, setForms] = useState({
     currentPassword: "",
     password: "",
-    confirmPasswode: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState<{
     currentPassword?: string;
     password?: string;
-    confirmPasswode?: string;
+    confirmPassword?: string;
   }>({});
 
   const [isLoading, setIsLoading] = useState(false);
@@ -24,14 +25,14 @@ const UpdatePassword = () => {
     let errors: {
       currentPassword?: string;
       password?: string;
-      confirmPasswode?: string;
+      confirmPassword?: string;
     } = {};
-    if (!forms.currentPassword || !forms.password || !forms.confirmPasswode) {
+    if (!forms.currentPassword || !forms.password || !forms.confirmPassword) {
       errors.currentPassword = "Current Password is required";
       errors.password = "Password is required";
-      errors.confirmPasswode = "Confirm Password is required";
-    } else if (forms.password !== forms.confirmPasswode) {
-      errors.confirmPasswode = "Password and Confirm Password should be same";
+      errors.confirmPassword = "Confirm Password is required";
+    } else if (forms.password !== forms.confirmPassword) {
+      errors.confirmPassword = "Password and Confirm Password should be same";
     }
     return errors;
   };
@@ -52,10 +53,11 @@ const UpdatePassword = () => {
     promise
       .then(
         function (response) {
-          router.push("/(auth)/sign-in");
+          router.replace("/(auth)/sign-in");
         },
         function (error) {
           console.error(error);
+          Alert.alert("Update Password", error);
         }
       )
       .finally(() => {
@@ -80,8 +82,9 @@ const UpdatePassword = () => {
             keyboardType="default"
             placeholder="Current Password"
           />
+
           {errors.currentPassword && (
-            <Text style={styles.error}>{errors.currentPassword}</Text>
+            <ErrorMessage message={errors.currentPassword} />
           )}
 
           <FormField
@@ -97,24 +100,25 @@ const UpdatePassword = () => {
             keyboardType="default"
             placeholder="Password"
           />
-          {errors.password && (
-            <Text style={styles.error}>{errors.password}</Text>
-          )}
+
+          {errors.password && <ErrorMessage message={errors.password} />}
+
           <FormField
             title="Confirm Password"
-            value={forms.confirmPasswode}
+            value={forms.confirmPassword}
             handleChangeText={(value) => {
               setForms((prev) => ({
                 ...prev,
-                confirmPasswode: value,
+                confirmPassword: value,
               }));
             }}
             otherStyles="mt-8"
             keyboardType="default"
             placeholder="Confirm Password"
           />
-          {errors.confirmPasswode && (
-            <Text style={styles.error}>{errors.confirmPasswode}</Text>
+
+          {errors.confirmPassword && (
+            <ErrorMessage message={errors.confirmPassword} />
           )}
 
           <CustomButton
@@ -130,10 +134,3 @@ const UpdatePassword = () => {
 };
 
 export default UpdatePassword;
-
-const styles = StyleSheet.create({
-  error: {
-    color: "red",
-    marginTop: 5,
-  },
-});

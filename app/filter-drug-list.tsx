@@ -17,6 +17,8 @@ import { getStringValue } from "@/src/helper/getStringValue";
 import { AppwriteService } from "@/src/appwrite/AppwriteService";
 import CustomButton from "@/src/components/ui/CustomButton";
 import { useCallback } from "react";
+import ShowLoadingScreen from "@/src/components/ui/ShowLoadingScreen";
+import APIFailureMessage from "@/src/components/ui/APIFailureMessage";
 
 export default function FilterDrugListScreen() {
   // Access the filters from the query parameters
@@ -65,30 +67,12 @@ export default function FilterDrugListScreen() {
 
   // Show loading indicator
   if (loading) {
-    return (
-      <SafeAreaView className="bg-primary flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#ffffff" />
-        <Text className="text-white mt-4">Loading drugs...</Text>
-      </SafeAreaView>
-    );
+    return <ShowLoadingScreen />;
   }
 
   // Show error message
   if (error) {
-    return (
-      <SafeAreaView className="bg-primary flex-1 justify-center items-center">
-        <Text className="text-white text-lg font-bold text-center">
-          Error: {error.message}
-        </Text>
-        <CustomButton
-          title="Retry"
-          containerStyles="bg-secondary py-3 rounded-lg min-h-[34px] mt-4"
-          textStyles="font-pregular text-base"
-          handlePress={refetch}
-          isLoading={loading}
-        />
-      </SafeAreaView>
-    );
+    return <APIFailureMessage message={error.message} handlePress={refetch} />;
   }
 
   // Show empty state message if no drugs are available
@@ -105,7 +89,7 @@ export default function FilterDrugListScreen() {
     );
   }
 
-  // Show empty state message if no drugs are available
+  // show drug count
   const count = data ? " - (" + data.length.toString() + ")" : "";
 
   return (
