@@ -12,12 +12,11 @@ export class AppwriteService {
   private databases: Databases;
 
   private constructor() {
-    const client = new Client()
+    this.client = new Client()
       .setProject(APPWRITE_CONFIG.PROJECT_ID)
       .setPlatform(APPWRITE_CONFIG.PLATFORM);
-    this.client = client;
-    this.databases = new Databases(client);
-    this.account = new Account(client);
+    this.databases = new Databases(this.client);
+    this.account = new Account(this.client);
   }
 
   public static getInstance(): AppwriteService {

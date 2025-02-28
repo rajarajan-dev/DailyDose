@@ -24,8 +24,7 @@ export default function SignIn() {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
-  const { isLoading, setIsLogin, setIsLoading, setUserId } =
-    React.useContext(StateContext);
+  const { setIsLogin } = React.useContext(StateContext);
 
   // Validate inputs
   const validateInputs = () => {
@@ -85,7 +84,6 @@ export default function SignIn() {
       promise.then(
         async function (response) {
           setIsLogin(true);
-          setUserId(response.userId);
           await SecureStore.setItemAsync("sessionid", response.$id);
 
           // Save credentials if "Remember Me" is enabled
