@@ -4,7 +4,7 @@ import { View, Text, Image, TouchableOpacity, Linking } from "react-native";
 
 const SupportUs = () => {
   const upiLink =
-    "upi://pay?pa=your-upi-id@okhdfcbank&pn=YourName&mc=0000&mode=02&purpose=00";
+    "upi://pay?pa=rynjas@okicici&pn=Rajarajan&mc=0000&mode=02&purpose=00&cu=INR";
 
   const handleSupportPress = () => {
     Linking.openURL(upiLink).catch((err) =>

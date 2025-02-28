@@ -11,6 +11,7 @@ import {
   Alert,
   Platform,
   StatusBar,
+  ScrollView,
 } from "react-native";
 
 const SettingsScreen = () => {
@@ -56,25 +57,29 @@ const SettingsScreen = () => {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       }}
     >
-      <Header title="Settings" />
+      <ScrollView>
+        <View className="flex-1">
+          <Header title="Settings" />
 
-      <View className="p-2">
-        <Text className="text-xl text-gray-400">User Name :</Text>
-        <Text className="text-gray-200 text-xl ml-4">{name}</Text>
-        <Text className="text-xl text-gray-400 mt-2">Email :</Text>
-        <Text className="text-gray-200 text-xl ml-4">{email}</Text>
-      </View>
-      <View className="bg-gray-500 h-0.5 w-full my-2"></View>
+          <View className="p-2">
+            <Text className="text-xl text-gray-400">User Name :</Text>
+            <Text className="text-gray-200 text-xl ml-4">{name}</Text>
+            <Text className="text-xl text-gray-400 mt-2">Email :</Text>
+            <Text className="text-gray-200 text-xl ml-4">{email}</Text>
+          </View>
+          <View className="bg-gray-500 h-0.5 w-full my-2"></View>
 
-      <Link href="/update-password">
-        <View className="p-4">
-          <Text className="text-secondary text-xl">Update Password</Text>
+          <Link href="/update-password">
+            <View className="p-4">
+              <Text className="text-secondary text-xl">Update Password</Text>
+            </View>
+          </Link>
+
+          <View className="p-2">
+            <SupportUs />
+          </View>
         </View>
-      </Link>
-
-      <View className="p-2">
-        <SupportUs />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
